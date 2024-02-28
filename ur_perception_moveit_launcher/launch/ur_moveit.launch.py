@@ -156,7 +156,7 @@ def launch_setup(context, *args, **kwargs):
             warehouse_ros_config,
             moveit_sensor_config,
             {"octomap_frame": "world"},
-            {"octomap_resolution": 0.05},
+            {"octomap_resolution": 0.02},
             {"max_range": 2.0},
         ],
     )

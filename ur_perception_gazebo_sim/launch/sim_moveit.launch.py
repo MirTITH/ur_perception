@@ -38,15 +38,8 @@ kThisPackageName = "ur_perception_gazebo_sim"
 
 
 def launch_setup(context, *args, **kwargs):
-
-    # Initialize Arguments
     ur_type = LaunchConfiguration("ur_type")
     safety_limits = LaunchConfiguration("safety_limits")
-    # General arguments
-    # description_package = LaunchConfiguration("description_package")
-    # description_file = LaunchConfiguration("description_file")
-    # moveit_config_package = LaunchConfiguration("moveit_config_package")
-    # moveit_config_file = LaunchConfiguration("moveit_config_file")
     prefix = LaunchConfiguration("prefix")
 
     ur_control_launch = IncludeLaunchDescription(
@@ -54,14 +47,12 @@ def launch_setup(context, *args, **kwargs):
     )
 
     ur_moveit_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([FindPackageShare("ur_perception_moveit_launcher"), "/launch", "/ur_moveit.launch.py"]),
+        PythonLaunchDescriptionSource(
+            [FindPackageShare("ur_perception_moveit_launcher"), "/launch", "/ur_moveit.launch.py"]
+        ),
         launch_arguments={
             "ur_type": ur_type,
             "safety_limits": safety_limits,
-            # "description_package": "ur_description",
-            # "description_file": "ur.urdf.xacro",
-            # "moveit_config_package": moveit_config_package,
-            # "moveit_config_file": moveit_config_file,
             "prefix": prefix,
             "use_sim_time": "true",
             "launch_rviz": "true",
@@ -80,7 +71,6 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     declared_arguments = []
-    # UR specific arguments
     declared_arguments.append(
         DeclareLaunchArgument(
             "ur_type",
@@ -96,52 +86,6 @@ def generate_launch_description():
             description="Enables the safety limits controller if true.",
         )
     )
-    # General arguments
-    # declared_arguments.append(
-    #     DeclareLaunchArgument(
-    #         "runtime_config_package",
-    #         default_value="ur_simulation_gazebo",
-    #         description='Package with the controller\'s configuration in "config" folder. \
-    #     Usually the argument is not set, it enables use of a custom setup.',
-    #     )
-    # )
-    # declared_arguments.append(
-    #     DeclareLaunchArgument(
-    #         "controllers_file",
-    #         default_value="ur_controllers.yaml",
-    #         description="YAML file with the controllers configuration.",
-    #     )
-    # )
-    # declared_arguments.append(
-    #     DeclareLaunchArgument(
-    #         "description_package",
-    #         default_value="ur_description",
-    #         description="Description package with robot URDF/XACRO files. Usually the argument \
-    #     is not set, it enables use of a custom description.",
-    #     )
-    # )
-    # declared_arguments.append(
-    #     DeclareLaunchArgument(
-    #         "description_file",
-    #         default_value="ur.urdf.xacro",
-    #         description="URDF/XACRO description file with the robot.",
-    #     )
-    # )
-    # declared_arguments.append(
-    #     DeclareLaunchArgument(
-    #         "moveit_config_package",
-    #         default_value="ur_rgbd_moveit_config",
-    #         description="MoveIt config package with robot SRDF/XACRO files. Usually the argument \
-    #     is not set, it enables use of a custom moveit config.",
-    #     )
-    # )
-    # declared_arguments.append(
-    #     DeclareLaunchArgument(
-    #         "moveit_config_file",
-    #         default_value="ur.srdf.xacro",
-    #         description="MoveIt SRDF/XACRO description file with the robot.",
-    #     )
-    # )
     declared_arguments.append(
         DeclareLaunchArgument(
             "prefix",
