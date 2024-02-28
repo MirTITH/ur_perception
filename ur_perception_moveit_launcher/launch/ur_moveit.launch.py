@@ -43,15 +43,9 @@ from ur_moveit_config.launch_common import load_yaml
 
 def launch_setup(context, *args, **kwargs):
 
-    # Initialize Arguments
-    ur_type = LaunchConfiguration("ur_type")
+    # Initialize Arguments_type")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
-    safety_limits = LaunchConfiguration("safety_limits")
-    safety_pos_margin = LaunchConfiguration("safety_pos_margin")
-    safety_k_position = LaunchConfiguration("safety_k_position")
     # General arguments
-    description_package = LaunchConfiguration("description_package")
-    description_file = LaunchConfiguration("description_file")
     moveit_config_package = LaunchConfiguration("moveit_config_package")
     moveit_config_file = LaunchConfiguration("moveit_config_file")
     warehouse_sqlite_path = LaunchConfiguration("warehouse_sqlite_path")
@@ -59,67 +53,6 @@ def launch_setup(context, *args, **kwargs):
     use_sim_time = LaunchConfiguration("use_sim_time")
     launch_rviz = LaunchConfiguration("launch_rviz")
     launch_servo = LaunchConfiguration("launch_servo")
-
-    joint_limit_params = PathJoinSubstitution(
-        [FindPackageShare(description_package), "config", ur_type, "joint_limits.yaml"]
-    )
-    kinematics_params = PathJoinSubstitution(
-        [FindPackageShare(description_package), "config", ur_type, "default_kinematics.yaml"]
-    )
-    physical_params = PathJoinSubstitution(
-        [FindPackageShare(description_package), "config", ur_type, "physical_parameters.yaml"]
-    )
-    visual_params = PathJoinSubstitution(
-        [FindPackageShare(description_package), "config", ur_type, "visual_parameters.yaml"]
-    )
-
-    robot_description_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution([FindPackageShare(description_package), "urdf", description_file]),
-            " ",
-            "robot_ip:=xxx.yyy.zzz.www",
-            " ",
-            "joint_limit_params:=",
-            joint_limit_params,
-            " ",
-            "kinematics_params:=",
-            kinematics_params,
-            " ",
-            "physical_params:=",
-            physical_params,
-            " ",
-            "visual_params:=",
-            visual_params,
-            " ",
-            "safety_limits:=",
-            safety_limits,
-            " ",
-            "safety_pos_margin:=",
-            safety_pos_margin,
-            " ",
-            "safety_k_position:=",
-            safety_k_position,
-            " ",
-            "name:=",
-            "ur",
-            " ",
-            "ur_type:=",
-            ur_type,
-            " ",
-            "script_filename:=ros_control.urscript",
-            " ",
-            "input_recipe_filename:=rtde_input_recipe.txt",
-            " ",
-            "output_recipe_filename:=rtde_output_recipe.txt",
-            " ",
-            "prefix:=",
-            prefix,
-            " ",
-        ]
-    )
-    robot_description = {"robot_description": robot_description_content}
 
     # MoveIt Configuration
     robot_description_semantic_content = Command(
@@ -197,7 +130,7 @@ def launch_setup(context, *args, **kwargs):
         executable="move_group",
         output="screen",
         parameters=[
-            robot_description,
+            # robot_description,
             robot_description_semantic,
             robot_description_kinematics,
             # robot_description_planning,
@@ -220,7 +153,7 @@ def launch_setup(context, *args, **kwargs):
         output="log",
         arguments=["-d", rviz_config_file],
         parameters=[
-            robot_description,
+            # robot_description,
             robot_description_semantic,
             ompl_planning_pipeline_config,
             robot_description_kinematics,
@@ -238,13 +171,17 @@ def launch_setup(context, *args, **kwargs):
         executable="servo_node_main",
         parameters=[
             servo_params,
-            robot_description,
+            # robot_description,
             robot_description_semantic,
         ],
         output="screen",
     )
 
-    nodes_to_start = [move_group_node, rviz_node, servo_node]
+    nodes_to_start = [
+        move_group_node,
+        rviz_node,
+        servo_node,
+    ]
 
     return nodes_to_start
 
@@ -255,56 +192,12 @@ def generate_launch_description():
     # UR specific arguments
     declared_arguments.append(
         DeclareLaunchArgument(
-            "ur_type",
-            description="Type/series of used UR robot.",
-            choices=["ur3", "ur3e", "ur5", "ur5e", "ur10", "ur10e", "ur16e", "ur20"],
-            default_value="ur5e",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
             "use_fake_hardware",
             default_value="false",
             description="Indicate whether robot is running with fake hardware mirroring command to its states.",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "safety_limits",
-            default_value="true",
-            description="Enables the safety limits controller if true.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "safety_pos_margin",
-            default_value="0.15",
-            description="The margin to lower and upper limits in the safety controller.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "safety_k_position",
-            default_value="20",
-            description="k-position factor in the safety controller.",
-        )
-    )
     # General arguments
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "description_package",
-            default_value="ur_description",
-            description="Description package with robot URDF/XACRO files. Usually the argument \
-        is not set, it enables use of a custom description.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "description_file",
-            default_value="ur.urdf.xacro",
-            description="URDF/XACRO description file with the robot.",
-        )
-    )
     declared_arguments.append(
         DeclareLaunchArgument(
             "moveit_config_package",
@@ -344,6 +237,6 @@ def generate_launch_description():
         )
     )
     declared_arguments.append(DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?"))
-    declared_arguments.append(DeclareLaunchArgument("launch_servo", default_value="true", description="Launch Servo?"))
+    declared_arguments.append(DeclareLaunchArgument("launch_servo", default_value="false", description="Launch Servo?"))
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

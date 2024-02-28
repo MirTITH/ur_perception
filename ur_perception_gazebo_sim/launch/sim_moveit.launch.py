@@ -65,6 +65,7 @@ def launch_setup(context, *args, **kwargs):
             "prefix": prefix,
             "use_sim_time": "true",
             "launch_rviz": "true",
+            "launch_servo": "false",
             "use_fake_hardware": "true",  # to change moveit default controller to joint_trajectory_controller
         }.items(),
     )
