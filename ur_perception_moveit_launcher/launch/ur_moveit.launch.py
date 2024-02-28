@@ -126,9 +126,7 @@ def launch_setup(context, *args, **kwargs):
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution(
-                [FindPackageShare(moveit_config_package), "srdf", moveit_config_file]
-            ),
+            PathJoinSubstitution([FindPackageShare(moveit_config_package), "srdf", moveit_config_file]),
             " ",
             "name:=",
             # Also ur_type parameter could be used but then the planning group names in yaml
@@ -213,9 +211,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     # rviz with moveit configuration
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare(moveit_config_package), "rviz", "view_robot.rviz"]
-    )
+    rviz_config_file = PathJoinSubstitution([FindPackageShare(moveit_config_package), "rviz", "view_robot.rviz"])
     rviz_node = Node(
         package="rviz2",
         condition=IfCondition(launch_rviz),
@@ -262,6 +258,7 @@ def generate_launch_description():
             "ur_type",
             description="Type/series of used UR robot.",
             choices=["ur3", "ur3e", "ur5", "ur5e", "ur10", "ur10e", "ur16e", "ur20"],
+            default_value="ur5e",
         )
     )
     declared_arguments.append(
@@ -346,11 +343,7 @@ def generate_launch_description():
         have to be updated.",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument("launch_servo", default_value="true", description="Launch Servo?")
-    )
+    declared_arguments.append(DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?"))
+    declared_arguments.append(DeclareLaunchArgument("launch_servo", default_value="true", description="Launch Servo?"))
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
