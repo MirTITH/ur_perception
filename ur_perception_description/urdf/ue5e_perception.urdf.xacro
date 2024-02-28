@@ -37,7 +37,7 @@
                 <image>
                     <width>640</width>
                     <height>480</height>
-                    <format>BGR8</format>
+                    <format>R8G8B8</format>
                 </image>
                 <clip>
                     <near>0.02</near>
