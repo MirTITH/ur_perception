@@ -39,6 +39,16 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from ur_moveit_config.launch_common import load_yaml
+from ament_index_python.packages import get_package_share_directory
+import yaml
+
+
+def load_yaml2(file_path):
+    try:
+        with open(file_path, "r") as file:
+            return yaml.load(file, Loader=yaml.FullLoader)
+    except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
+        return None
 
 
 def launch_setup(context, *args, **kwargs):
@@ -125,6 +135,10 @@ def launch_setup(context, *args, **kwargs):
     }
 
     # Start the actual move_group node/action server
+    moveit_sensor_config = load_yaml2(
+        os.path.join(get_package_share_directory("ur_perception_moveit_config"), "config/sensors_3d.yaml")
+    )
+
     move_group_node = Node(
         package="moveit_ros_move_group",
         executable="move_group",
@@ -140,6 +154,10 @@ def launch_setup(context, *args, **kwargs):
             planning_scene_monitor_parameters,
             {"use_sim_time": use_sim_time},
             warehouse_ros_config,
+            moveit_sensor_config,
+            {"octomap_frame": "world"},
+            {"octomap_resolution": 0.05},
+            {"max_range": 2.0},
         ],
     )
 
