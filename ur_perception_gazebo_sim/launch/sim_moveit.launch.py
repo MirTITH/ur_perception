@@ -53,25 +53,25 @@ def launch_setup(context, *args, **kwargs):
         PythonLaunchDescriptionSource([FindPackageShare(kThisPackageName), "/launch", "/sim_control.launch.py"])
     )
 
-    ur_moveit_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([FindPackageShare("ur_perception_moveit_config"), "/launch", "/ur_moveit.launch.py"]),
-        launch_arguments={
-            "ur_type": ur_type,
-            "safety_limits": safety_limits,
-            "description_package": "ur_description",
-            "description_file": "ur.urdf.xacro",
-            "moveit_config_package": moveit_config_package,
-            "moveit_config_file": moveit_config_file,
-            "prefix": prefix,
-            "use_sim_time": "true",
-            "launch_rviz": "true",
-            "use_fake_hardware": "true",  # to change moveit default controller to joint_trajectory_controller
-        }.items(),
-    )
+    # ur_moveit_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([FindPackageShare("ur_perception_moveit_config"), "/launch", "/ur_moveit.launch.py"]),
+    #     launch_arguments={
+    #         "ur_type": ur_type,
+    #         "safety_limits": safety_limits,
+    #         "description_package": "ur_description",
+    #         "description_file": "ur.urdf.xacro",
+    #         "moveit_config_package": moveit_config_package,
+    #         "moveit_config_file": moveit_config_file,
+    #         "prefix": prefix,
+    #         "use_sim_time": "true",
+    #         "launch_rviz": "true",
+    #         "use_fake_hardware": "true",  # to change moveit default controller to joint_trajectory_controller
+    #     }.items(),
+    # )
 
     nodes_to_launch = [
         ur_control_launch,
-        ur_moveit_launch,
+        # ur_moveit_launch,
     ]
 
     return nodes_to_launch
