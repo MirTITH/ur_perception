@@ -27,6 +27,8 @@ kThisPackageName = "ur_perception_gazebo_sim"
 def generate_launch_description():
     launch_entities = []
 
+    gazebo_world = os.path.join(get_package_share_directory(kThisPackageName), "gazebo_world/cafe_earthquake.xml")
+
     ur_sim_gazebo_launch_file = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [os.path.join(get_package_share_directory("ur_simulation_gazebo"), "launch/ur_sim_control.launch.py")]
@@ -35,6 +37,7 @@ def generate_launch_description():
             "description_package": "ur_perception_description",
             "description_file": "ue5e_perception.urdf.xacro",
             "launch_rviz": "false",
+            "world": gazebo_world,
         }.items(),
     )
     launch_entities.append(ur_sim_gazebo_launch_file)

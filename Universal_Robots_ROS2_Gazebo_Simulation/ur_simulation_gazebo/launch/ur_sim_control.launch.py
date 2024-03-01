@@ -64,17 +64,13 @@ def launch_setup(context, *args, **kwargs):
         [FindPackageShare(runtime_config_package), "config", controllers_file]
     )
 
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare(description_package), "rviz", "view_robot.rviz"]
-    )
+    rviz_config_file = PathJoinSubstitution([FindPackageShare(description_package), "rviz", "view_robot.rviz"])
 
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution(
-                [FindPackageShare(description_package), "urdf", description_file]
-            ),
+            PathJoinSubstitution([FindPackageShare(description_package), "urdf", description_file]),
             " ",
             "safety_limits:=",
             safety_limits,
@@ -148,9 +144,8 @@ def launch_setup(context, *args, **kwargs):
 
     # Gazebo nodes
     gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [FindPackageShare("gazebo_ros"), "/launch", "/gazebo.launch.py"]
-        ),
+        PythonLaunchDescriptionSource([FindPackageShare("gazebo_ros"), "/launch", "/gazebo.launch.py"]),
+        launch_arguments={"world": LaunchConfiguration("world")}.items(),
     )
 
     # Spawn robot
@@ -261,8 +256,7 @@ def generate_launch_description():
             description="Robot controller to start.",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
-    )
+    declared_arguments.append(DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?"))
+    declared_arguments.append(DeclareLaunchArgument("world", description="Gazebo world"))
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
