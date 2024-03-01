@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by
+Stephen Brawner (brawner@gmail.com) 
      Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
-<robot
-  name="hdz_simplified">
-  <link
-    name="hdz_up_board">
+<robot name="hdz_simplified">
+  <link name="hdz_up_board">
     <inertial>
       <origin
         xyz="-4.3979E-18 0.0083035 0.01"
         rpy="0 0 0" />
-      <mass
-        value="12.696" />
+      <mass value="12.696" />
       <inertia
         ixx="0.83466"
         ixy="-4.0071E-18"
@@ -26,7 +24,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://hdz_simplified/meshes/hdz_up_board.STL" />
+          filename="file://$(find hdz_simplified)/meshes/hdz_up_board.STL" />
       </geometry>
       <material
         name="">
@@ -40,7 +38,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://hdz_simplified/meshes/hdz_up_board.STL" />
+          filename="file://$(find hdz_simplified)/meshes/hdz_up_board.STL" />
       </geometry>
     </collision>
   </link>
@@ -66,7 +64,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://hdz_simplified/meshes/hdz_arm_frame.STL" />
+          filename="file://$(find hdz_simplified)/meshes/hdz_arm_frame.STL" />
       </geometry>
       <material
         name="">
@@ -80,7 +78,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://hdz_simplified/meshes/hdz_arm_frame.STL" />
+          filename="file://$(find hdz_simplified)/meshes/hdz_arm_frame.STL" />
       </geometry>
     </collision>
   </link>

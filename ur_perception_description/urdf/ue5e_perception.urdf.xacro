@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <robot name="ur5e_rgbd" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- create link fixed to the "world" -->
+    <link name="world" />
+
+    <!-- 撼地者 -->
+    <xacro:include filename="$(find hdz_simplified)/urdf/hdz_simplified.urdf" />
+    <joint name="hdz_joint" type="fixed">
+        <parent link="world" />
+        <child link="hdz_up_board" />
+        <origin xyz="0.0 0.0 0.487" rpy="0.0 0.0 0.0" />
+    </joint>
+
     <!-- UR model -->
+    <xacro:arg name="ur_parent" default="hdz_up_board" />
     <xacro:include filename="$(find ur_perception_description)/urdf/ur5e.urdf.xacro" />
 
     <!-- d435i model -->
