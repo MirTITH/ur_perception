@@ -27,8 +27,8 @@ kThisPackageName = "ur_perception_gazebo_sim"
 def generate_launch_description():
     launch_entities = []
 
-    # gazebo_world = os.path.join(get_package_share_directory(kThisPackageName), "gazebo_world/cafe_earthquake.world")
-    gazebo_world = ""
+    # gazebo_world = ""
+    gazebo_world = os.path.join(get_package_share_directory(kThisPackageName), "gazebo_world/cafe_earthquake.world")
 
     ur_sim_gazebo_launch_file = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -42,6 +42,14 @@ def generate_launch_description():
         }.items(),
     )
     launch_entities.append(ur_sim_gazebo_launch_file)
+
+    launch_entities.append(
+        Node(
+            package="controller_manager",
+            executable="spawner",
+            arguments=["gripper_controller", "-c", "/controller_manager"],
+        )
+    )
 
     # rviz
     rviz_config_file = os.path.join(get_package_share_directory(kThisPackageName), "rviz", "view_robot_perception.rviz")

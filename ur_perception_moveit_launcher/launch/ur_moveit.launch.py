@@ -42,6 +42,8 @@ from ur_moveit_config.launch_common import load_yaml
 from ament_index_python.packages import get_package_share_directory
 import yaml
 
+kThisPackageName = "ur_perception_moveit_launcher"
+
 
 def load_yaml2(file_path):
     try:
@@ -69,7 +71,7 @@ def launch_setup(context, *args, **kwargs):
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([FindPackageShare(moveit_config_package), "srdf", moveit_config_file]),
+            PathJoinSubstitution([FindPackageShare(kThisPackageName), "srdf", moveit_config_file]),
             " ",
             "name:=",
             # Also ur_type parameter could be used but then the planning group names in yaml

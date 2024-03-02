@@ -7,7 +7,6 @@ Panels:
         - /Global Options1
         - /Status1
         - /DepthCloud1/Auto Size1
-        - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 645
@@ -107,6 +106,61 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        hdz_arm_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        hdz_up_board:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_left_finger_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_left_finger_tip_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_left_inner_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_left_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_right_finger_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_right_finger_tip_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_right_inner_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_right_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         shoulder_link:
           Alpha: 1
           Show Axes: false
@@ -187,69 +241,19 @@ Visualization Manager:
       Use rainbow: true
       Value: false
     - Class: rviz_default_plugins/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        base:
-          Value: true
-        base_link:
-          Value: true
-        base_link_inertia:
-          Value: true
-        camera_bottom_screw_frame:
-          Value: true
-        camera_link:
-          Value: true
-        camera_link_optical:
-          Value: true
-        flange:
-          Value: true
-        forearm_link:
-          Value: true
-        ft_frame:
-          Value: true
-        shoulder_link:
-          Value: true
-        tool0:
-          Value: true
-        upper_arm_link:
-          Value: true
-        world:
-          Value: true
-        wrist_1_link:
-          Value: true
-        wrist_2_link:
-          Value: true
-        wrist_3_link:
-          Value: true
       Marker Scale: 0.20000000298023224
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        world:
-          base_link:
-            base:
-              {}
-            base_link_inertia:
-              shoulder_link:
-                upper_arm_link:
-                  forearm_link:
-                    wrist_1_link:
-                      wrist_2_link:
-                        wrist_3_link:
-                          flange:
-                            tool0:
-                              camera_bottom_screw_frame:
-                                camera_link:
-                                  camera_link_optical:
-                                    {}
-                          ft_frame:
-                            {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -296,25 +300,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 3.969904899597168
+      Distance: 2.705379009246826
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.9136207699775696
-        Y: 0.20482993125915527
-        Z: 0.2502209544181824
+        X: -0.22491353750228882
+        Y: -0.6111069321632385
+        Z: 0.6882379055023193
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.30039823055267334
+      Pitch: 0.935397744178772
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.8453994989395142
+      Yaw: 0.4303998351097107
     Saved: ~
 Window Geometry:
   Displays:
