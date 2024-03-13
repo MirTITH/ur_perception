@@ -1,22 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by
-Stephen Brawner (brawner@gmail.com) 
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
      Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
-<robot name="hdz_simplified">
-  <link name="hdz_up_board">
+<robot
+  name="hdz_simplified">
+  <link
+    name="base_link">
     <inertial>
       <origin
-        xyz="-4.3979E-18 0.0083035 0.01"
+        xyz="5.2042E-18 4.4255E-17 0.0025"
         rpy="0 0 0" />
-      <mass value="12.696" />
+      <mass
+        value="3.1175" />
       <inertia
-        ixx="0.83466"
-        ixy="-4.0071E-18"
-        ixz="8.674E-19"
-        iyy="0.52749"
-        iyz="5.0172E-17"
-        izz="1.3613" />
+        ixx="0.13172"
+        ixy="8.8751E-19"
+        ixz="5.1381E-20"
+        iyy="0.20619"
+        iyz="5.4212E-20"
+        izz="0.3379" />
     </inertial>
     <visual>
       <origin
@@ -24,12 +26,12 @@ Stephen Brawner (brawner@gmail.com)
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file://$(find hdz_simplified)/meshes/hdz_up_board.STL" />
+          filename="package://hdz_simplified/meshes/base_link.STL" />
       </geometry>
       <material
         name="">
         <color
-          rgba="0.1 0.1 0.1 1" />
+          rgba="1 1 1 1" />
       </material>
     </visual>
     <collision>
@@ -38,25 +40,25 @@ Stephen Brawner (brawner@gmail.com)
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file://$(find hdz_simplified)/meshes/hdz_up_board.STL" />
+          filename="package://hdz_simplified/meshes/base_link.STL" />
       </geometry>
     </collision>
   </link>
   <link
-    name="hdz_arm_frame">
+    name="base_frame_link">
     <inertial>
       <origin
-        xyz="-1.455E-16 0.14288 0.0088033"
+        xyz="0.0088033 8.2139E-17 0.14288"
         rpy="0 0 0" />
       <mass
         value="15.553" />
       <inertia
-        ixx="0.31512"
-        ixy="3.4934E-18"
-        ixz="3.8811E-17"
-        iyy="0.36"
-        iyz="-0.037958"
-        izz="0.42803" />
+        ixx="0.42803"
+        ixy="6.1895E-17"
+        ixz="-0.037958"
+        iyy="0.31512"
+        iyz="-1.7925E-17"
+        izz="0.36" />
     </inertial>
     <visual>
       <origin
@@ -64,12 +66,12 @@ Stephen Brawner (brawner@gmail.com)
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file://$(find hdz_simplified)/meshes/hdz_arm_frame.STL" />
+          filename="package://hdz_simplified/meshes/base_frame_link.STL" />
       </geometry>
       <material
         name="">
         <color
-          rgba="0.1 0.1 0.1 1" />
+          rgba="1 1 1 1" />
       </material>
     </visual>
     <collision>
@@ -78,20 +80,20 @@ Stephen Brawner (brawner@gmail.com)
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file://$(find hdz_simplified)/meshes/hdz_arm_frame.STL" />
+          filename="package://hdz_simplified/meshes/base_frame_link.STL" />
       </geometry>
     </collision>
   </link>
   <joint
-    name="hdz_arm_frame_joint"
+    name="base_frame_joint"
     type="fixed">
     <origin
-      xyz="0 0.242 0.02"
-      rpy="1.5707963267949 0 0" />
+      xyz="-0.23005 0 0.005"
+      rpy="0 0 0" />
     <parent
-      link="hdz_up_board" />
+      link="base_link" />
     <child
-      link="hdz_arm_frame" />
+      link="base_frame_link" />
     <axis
       xyz="0 0 0" />
   </joint>
