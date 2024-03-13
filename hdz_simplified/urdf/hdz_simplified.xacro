@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hdz_simplified">
+  <link name="hdz_base_link" />
+  <link name="hdz_arm_base_link" />
+
+  <link name="hdz_up_board_link">
+    <inertial>
+      <origin xyz="5.2042E-18 4.4255E-17 0.0025" rpy="0 0 0" />
+      <mass value="3.1175" />
+      <inertia ixx="0.13172" ixy="8.8751E-19" ixz="5.1381E-20"
+        iyy="0.20619" iyz="5.4212E-20" izz="0.3379" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://hdz_simplified/meshes/hdz_up_board_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.6 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://hdz_simplified/meshes/hdz_up_board_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="hdz_steel_frame_link">
+    <inertial>
+      <origin xyz="0.0088033 8.2139E-17 0.14288" rpy="0 0 0" />
+      <mass value="15.553" />
+      <inertia ixx="0.42803" ixy="6.1895E-17" ixz="-0.037958"
+        iyy="0.31512" iyz="-1.7925E-17" izz="0.36" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://hdz_simplified/meshes/hdz_steel_frame_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.6 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://hdz_simplified/meshes/hdz_steel_frame_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="hdz_base_joint" type="fixed">
+    <parent link="hdz_base_link" />
+    <child link="hdz_up_board_link" />
+    <origin xyz="0.0 0.0 0.482" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <joint name="hdz_steel_frame_joint" type="fixed">
+    <origin xyz="-0.23005 0 0.005" rpy="0 0 0" />
+    <parent link="hdz_up_board_link" />
+    <child link="hdz_steel_frame_link" />
+  </joint>
+
+  <joint name="hdz_arm_base_joint" type="fixed">
+    <origin xyz="0.203 0 0" rpy="0 0 0" />
+    <parent link="hdz_up_board_link" />
+    <child link="hdz_arm_base_link" />
+  </joint>
+</robot>

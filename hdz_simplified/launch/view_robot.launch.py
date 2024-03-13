@@ -14,7 +14,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindPackageShare("urdf_launch"), "launch", "display.launch.py"]),
             launch_arguments={
                 "urdf_package": kThisPackageName,
-                "urdf_package_path": PathJoinSubstitution(["urdf", "hdz_simplified.urdf"]),
+                "urdf_package_path": PathJoinSubstitution(["urdf", "hdz_simplified.xacro"]),
                 "rviz_config": PathJoinSubstitution([FindPackageShare(kThisPackageName), "config", "view_robot.rviz"]),
             }.items(),
         )

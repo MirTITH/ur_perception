@@ -4,14 +4,15 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
         - /Status1
-        - /Grid1
         - /RobotModel1
         - /RobotModel1/Mass Properties1
+        - /TF1
         - /TF1/Frames1
         - /TF1/Tree1
       Splitter Ratio: 0.5
-    Tree Height: 362
+    Tree Height: 473
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
@@ -36,7 +37,7 @@ Visualization Manager:
         Z: 0
       Plane: XY
       Plane Cell Count: 10
-      Reference Frame: base_link
+      Reference Frame: <Fixed Frame>
       Value: true
     - Alpha: 0.800000011920929
       Class: rviz_default_plugins/RobotModel
@@ -56,12 +57,16 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base_frame_link:
+        hdz_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hdz_steel_frame_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        base_link:
+        hdz_up_board_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -79,25 +84,28 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        base_frame_link:
+        hdz_base_link:
           Value: true
-        base_link:
+        hdz_steel_frame_link:
           Value: true
-      Marker Scale: 0.5
+        hdz_up_board_link:
+          Value: true
+      Marker Scale: 0.4000000059604645
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          base_frame_link:
-            {}
+        hdz_base_link:
+          hdz_up_board_link:
+            hdz_steel_frame_link:
+              {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
-    Fixed Frame: base_link
+    Background Color: 0; 0; 0
+    Fixed Frame: hdz_base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -109,25 +117,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.1324801445007324
+      Distance: 2.9024455547332764
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.18739216029644012
-        Y: 0.12693466246128082
-        Z: -0.051670629531145096
+        X: -0.1519124060869217
+        Y: -0.15253570675849915
+        Z: 0.4500468969345093
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.48500001430511475
+      Pitch: 0.5350000858306885
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.9968351125717163
+      Yaw: 0.7218737602233887
     Saved: ~
 Window Geometry:
   Displays:
@@ -135,7 +143,7 @@ Window Geometry:
   Height: 1011
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000001000000000000020a00000380fc0200000002fb000000100044006900730070006c006100790073010000004c0000020e000000fd01000003fb0000000a00560069006500770073010000025b00000171000000d301000003000005750000038000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000001000000000000020000000380fc0200000002fb000000100044006900730070006c006100790073010000004c0000027d000000fd01000003fb0000000a0056006900650077007301000002ca00000102000000d3010000030000057f0000038000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 1920
