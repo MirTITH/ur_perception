@@ -5,15 +5,15 @@
     <link name="world" />
 
     <!-- 撼地者 -->
-    <xacro:include filename="$(find hdz_simplified)/urdf/hdz_simplified.urdf" />
+    <xacro:include filename="$(find hdz_simplified)/urdf/hdz_simplified.xacro" />
     <joint name="hdz_joint" type="fixed">
         <parent link="world" />
-        <child link="hdz_up_board" />
-        <origin xyz="0.0 0.0 0.487" rpy="0.0 0.0 0.0" />
+        <child link="hdz_base_link" />
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
     </joint>
 
     <!-- UR model -->
-    <xacro:arg name="ur_parent" default="hdz_up_board" />
+    <xacro:arg name="ur_parent" default="hdz_arm_base_link" />
     <xacro:include filename="$(find ur_perception_description)/urdf/ur5e.urdf.xacro" />
 
     <!-- RobotIQ Gripper -->
