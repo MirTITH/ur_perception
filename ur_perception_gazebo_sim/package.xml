@@ -10,7 +10,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>realsense2_description</exec_depend>
-  <exec_depend>gazebo-ros-pkgs</exec_depend>
+  <exec_depend>gazebo_ros_pkgs</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
