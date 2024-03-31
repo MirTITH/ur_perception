@@ -13,7 +13,7 @@
     </joint>
 
     <!-- UR model -->
-    <xacro:arg name="ur_parent" default="hdz_arm_base_link" />
+    <xacro:arg name="ur_parent" default="hdz_ur_base_link" />
     <xacro:include filename="$(find ur_perception_description)/urdf/ur5e.urdf.xacro" />
 
     <!-- RobotIQ Gripper -->

@@ -1,70 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hdz_simplified">
-  <link name="hdz_base_link" />
-  <link name="hdz_arm_base_link" />
-
-  <link name="hdz_up_board_link">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hdz">
+  <link
+    name="hdz_base_link">
     <inertial>
-      <origin xyz="5.2042E-18 4.4255E-17 0.0025" rpy="0 0 0" />
-      <mass value="3.1175" />
-      <inertia ixx="0.13172" ixy="8.8751E-19" ixz="5.1381E-20"
-        iyy="0.20619" iyz="5.4212E-20" izz="0.3379" />
+      <origin
+        xyz="0.12543 -0.00028125 0.20317"
+        rpy="0 0 0" />
+      <mass
+        value="104.27" />
+      <inertia
+        ixx="1.0396"
+        ixy="-0.00012968"
+        ixz="-0.16582"
+        iyy="5.1965"
+        iyz="6.1158E-06"
+        izz="5.1293" />
     </inertial>
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://hdz_simplified/meshes/hdz_up_board_link.STL" />
+        <mesh
+          filename="package://hdz_simplified/meshes/hdz_base_link.STL" />
       </geometry>
-      <material name="">
-        <color rgba="0.5 0.5 0.6 1" />
+      <material
+        name="">
+        <color
+          rgba="0.8 0.8 0.8 1" />
       </material>
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://hdz_simplified/meshes/hdz_up_board_link.STL" />
+        <mesh
+          filename="package://hdz_simplified/meshes/hdz_base_link.STL" />
       </geometry>
     </collision>
   </link>
-  <link name="hdz_steel_frame_link">
+  <link
+    name="hdz_extend_board_link">
     <inertial>
-      <origin xyz="0.0088033 8.2139E-17 0.14288" rpy="0 0 0" />
-      <mass value="15.553" />
-      <inertia ixx="0.42803" ixy="6.1895E-17" ixz="-0.037958"
-        iyy="0.31512" iyz="-1.7925E-17" izz="0.36" />
+      <origin
+        xyz="-0.066986 -5.6066E-15 0.0025"
+        rpy="0 0 0" />
+      <mass
+        value="5.8885" />
+      <inertia
+        ixx="0.25499"
+        ixy="4.1319E-16"
+        ixz="1.5274E-19"
+        iyy="0.0505"
+        iyz="9.9326E-16"
+        izz="0.30546" />
     </inertial>
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://hdz_simplified/meshes/hdz_steel_frame_link.STL" />
+        <mesh
+          filename="package://hdz_simplified/meshes/hdz_extend_board_link.STL" />
       </geometry>
-      <material name="">
-        <color rgba="0.5 0.5 0.6 1" />
+      <material
+        name="">
+        <color
+          rgba="0.3 0.5 0.3 1" />
       </material>
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://hdz_simplified/meshes/hdz_steel_frame_link.STL" />
+        <mesh
+          filename="package://hdz_simplified/meshes/hdz_extend_board_link.STL" />
       </geometry>
     </collision>
   </link>
-
-  <joint name="hdz_base_joint" type="fixed">
-    <parent link="hdz_base_link" />
-    <child link="hdz_up_board_link" />
-    <origin xyz="0.0 0.0 0.482" rpy="0.0 0.0 0.0" />
+  <joint
+    name="hdz_extend_board_joint"
+    type="fixed">
+    <origin
+      xyz="0.23816 0 0.4357"
+      rpy="0 0 0" />
+    <parent
+      link="hdz_base_link" />
+    <child
+      link="hdz_extend_board_link" />
+    <axis
+      xyz="0 0 0" />
   </joint>
-
-  <joint name="hdz_steel_frame_joint" type="fixed">
-    <origin xyz="-0.23005 0 0.005" rpy="0 0 0" />
-    <parent link="hdz_up_board_link" />
-    <child link="hdz_steel_frame_link" />
+  <link name="hdz_ur_base_link" />
+  <joint
+    name="hdz_ur_base_joint"
+    type="fixed">
+    <origin
+      xyz="0.13075 0 -0.09"
+      rpy="0 0 0" />
+    <parent
+      link="hdz_extend_board_link" />
+    <child
+      link="hdz_ur_base_link" />
+    <axis
+      xyz="0 0 0" />
   </joint>
-
-  <joint name="hdz_arm_base_joint" type="fixed">
-    <origin xyz="0.203 0 0" rpy="0 0 0" />
-    <parent link="hdz_up_board_link" />
-    <child link="hdz_arm_base_link" />
+  <link
+    name="hdz_steel_frame_link">
+    <inertial>
+      <origin
+        xyz="-0.1116 -0.020422 0.25051"
+        rpy="0 0 0" />
+      <mass
+        value="10.158" />
+      <inertia
+        ixx="0.09884"
+        ixy="5.6177E-06"
+        ixz="-3.3121E-07"
+        iyy="0.085565"
+        iyz="-8.766E-06"
+        izz="0.037015" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hdz_simplified/meshes/hdz_steel_frame_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.2 0.2 0.2 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hdz_simplified/meshes/hdz_steel_frame_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hdz_steel_frame_joint"
+    type="fixed">
+    <origin
+      xyz="-0.29675 0 0.005"
+      rpy="0 0 0" />
+    <parent
+      link="hdz_extend_board_link" />
+    <child
+      link="hdz_steel_frame_link" />
+    <axis
+      xyz="0 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="hdz_ur_control_cabinet_link">
+    <inertial>
+      <origin
+        xyz="-0.00042578 4.3304E-05 0.052484"
+        rpy="0 0 0" />
+      <mass
+        value="0.96366" />
+      <inertia
+        ixx="0.016929"
+        ixy="-5.3803E-06"
+        ixz="1.9944E-06"
+        iyy="0.0096351"
+        iyz="3.1423E-06"
+        izz="0.022879" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hdz_simplified/meshes/hdz_ur_control_cabinet_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.2 0.2 0.2 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hdz_simplified/meshes/hdz_ur_control_cabinet_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hdz_ur_control_cabinet_joint"
+    type="fixed">
+    <origin
+      xyz="0.0335 0 -0.005"
+      rpy="0 0 0" />
+    <parent
+      link="hdz_steel_frame_link" />
+    <child
+      link="hdz_ur_control_cabinet_link" />
+    <axis
+      xyz="0 0 0" />
   </joint>
 </robot>

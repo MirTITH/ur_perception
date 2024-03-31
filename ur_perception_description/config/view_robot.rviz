@@ -12,7 +12,7 @@ Panels:
         - /TF1/Frames1
         - /TF1/Tree1
       Splitter Ratio: 0.5
-    Tree Height: 409
+    Tree Height: 400
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
@@ -39,7 +39,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 0.800000011920929
+    - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
       Description File: ""
@@ -96,20 +96,26 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        hdz_arm_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         hdz_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+          Value: true
+        hdz_extend_board_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         hdz_steel_frame_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        hdz_up_board_link:
+        hdz_ur_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hdz_ur_control_cabinet_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -223,13 +229,15 @@ Visualization Manager:
           Value: true
         ft_frame:
           Value: true
-        hdz_arm_base_link:
-          Value: true
         hdz_base_link:
+          Value: true
+        hdz_extend_board_link:
           Value: true
         hdz_steel_frame_link:
           Value: true
-        hdz_up_board_link:
+        hdz_ur_base_link:
+          Value: true
+        hdz_ur_control_cabinet_link:
           Value: true
         robotiq_85_base_link:
           Value: true
@@ -271,8 +279,11 @@ Visualization Manager:
       Tree:
         world:
           hdz_base_link:
-            hdz_up_board_link:
-              hdz_arm_base_link:
+            hdz_extend_board_link:
+              hdz_steel_frame_link:
+                hdz_ur_control_cabinet_link:
+                  {}
+              hdz_ur_base_link:
                 base_link:
                   base:
                     camera_bottom_screw_frame:
@@ -303,13 +314,11 @@ Visualization Manager:
                                             {}
                                 ft_frame:
                                   {}
-              hdz_steel_frame_link:
-                {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
-    Background Color: 0; 0; 0
+    Background Color: 49; 68; 77
     Fixed Frame: world
     Frame Rate: 30
   Name: root
@@ -322,7 +331,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 3.06750226020813
+      Distance: 4.00813627243042
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -337,10 +346,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4850003123283386
+      Pitch: 0.4350005090236664
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.8118736743927002
+      Yaw: 1.051868200302124
     Saved: ~
 Window Geometry:
   Displays:
@@ -348,9 +357,9 @@ Window Geometry:
   Height: 1051
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd000000010000000000000200000003a8fc0200000002fb000000100044006900730070006c006100790073010000004c0000023d000000fd01000003fb0000000a00560069006500770073010000028a0000016a000000d3010000030000057f000003a800000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000010000000000000200000003a0fc0200000002fb000000100044006900730070006c0061007900730100000050000002380000010101000003fb0000000a00560069006500770073010000028900000167000000db010000030000057f000003a000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 1920
-  X: 0
-  Y: 0
+  X: -33
+  Y: 23
