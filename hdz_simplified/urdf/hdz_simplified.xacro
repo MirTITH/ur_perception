@@ -21,16 +21,19 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
+        <box size="0.8 0.8 0.4" />
+      </geometry>
+      <!-- <geometry>
         <mesh
           filename="package://hdz_simplified/meshes/hdz_base_link.STL" />
-      </geometry>
+      </geometry> -->
       <material
         name="">
         <color
           rgba="0.8 0.8 0.8 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -38,7 +41,7 @@
         <mesh
           filename="package://hdz_simplified/meshes/hdz_base_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <link
     name="hdz_extend_board_link">
@@ -61,16 +64,19 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
+        <box size="0.2 0.2 0.2" />
+      </geometry>
+      <!-- <geometry>
         <mesh
           filename="package://hdz_simplified/meshes/hdz_extend_board_link.STL" />
-      </geometry>
+      </geometry> -->
       <material
         name="">
         <color
           rgba="0.3 0.5 0.3 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -78,7 +84,7 @@
         <mesh
           filename="package://hdz_simplified/meshes/hdz_extend_board_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint
     name="hdz_extend_board_joint"
@@ -127,9 +133,12 @@
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
+      <!-- <geometry>
+        <box size="0.2 0.2 0.2" />
+      </geometry> -->
       <geometry>
         <mesh
-          filename="package://hdz_simplified/meshes/hdz_steel_frame_link.STL" />
+          filename="package://hdz_simplified/meshes/hdz_steel_frame_link.obj" />
       </geometry>
       <material
         name="">
@@ -137,7 +146,7 @@
           rgba="0.2 0.2 0.2 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -145,7 +154,7 @@
         <mesh
           filename="package://hdz_simplified/meshes/hdz_steel_frame_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint
     name="hdz_steel_frame_joint"
@@ -186,16 +195,19 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
+        <box size="0.2 0.2 0.2" />
+      </geometry>
+      <!-- <geometry>
         <mesh
           filename="package://hdz_simplified/meshes/hdz_ur_control_cabinet_link.STL" />
-      </geometry>
+      </geometry> -->
       <material
         name="">
         <color
           rgba="0.2 0.2 0.2 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -203,7 +215,7 @@
         <mesh
           filename="package://hdz_simplified/meshes/hdz_ur_control_cabinet_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint
     name="hdz_ur_control_cabinet_joint"

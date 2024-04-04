@@ -3,96 +3,43 @@
 <robot name="ur5e_rgbd" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <!-- create link fixed to the "world" -->
     <link name="world" />
+    <link name="robot_base" />
+    <joint name="robot_base_joint" type="fixed">
+        <parent link="world" />
+        <child link="robot_base" />
+        <origin xyz="0.0 1.0 1.0" rpy="0.0 0.0 0.0" />
+    </joint>
+
 
     <!-- 撼地者 -->
     <xacro:include filename="$(find hdz_simplified)/urdf/hdz_simplified.xacro" />
     <joint name="hdz_joint" type="fixed">
-        <parent link="world" />
+        <parent link="robot_base" />
         <child link="hdz_base_link" />
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
     </joint>
 
     <!-- UR model -->
-    <xacro:arg name="ur_parent" default="hdz_ur_base_link" />
-    <xacro:include filename="$(find ur_perception_description)/urdf/ur5e.urdf.xacro" />
-
-    <!-- RobotIQ Gripper -->
-
-    <xacro:include filename="$(find robotiq_description)/urdf/robotiq_2f_85_macro.urdf.xacro" />
-    <xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="tool0"
-        use_fake_hardware="true">
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </xacro:robotiq_gripper>
-
-    <ros2_control name="RobotIQGazeboSystem" type="system">
-        <hardware>
-            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-        </hardware>
-        <joint name="robotiq_85_left_knuckle_joint">
-            <command_interface name="position" />
-            <state_interface name="position" />
-            <state_interface name="velocity" />
-            <state_interface name="effort" />
-        </joint>
-        <joint name="robotiq_85_right_knuckle_joint">
-            <!-- <param name="mimic">robotiq_85_left_knuckle_joint</param>
-            <param name="multiplier">-1</param> -->
-            <command_interface name="position" />
-            <state_interface name="position" />
-            <state_interface name="velocity" />
-            <state_interface name="effort" />
-        </joint>
-        <joint name="robotiq_85_left_inner_knuckle_joint">
-            <!-- <param name="mimic">robotiq_85_left_knuckle_joint</param>
-            <param name="multiplier">1</param> -->
-            <command_interface name="position" />
-            <state_interface name="position" />
-            <state_interface name="velocity" />
-            <state_interface name="effort" />
-        </joint>
-        <joint name="robotiq_85_right_inner_knuckle_joint">
-            <!-- <param name="mimic">robotiq_85_left_knuckle_joint</param>
-            <param name="multiplier">-1</param> -->
-            <command_interface name="position" />
-            <state_interface name="position" />
-            <state_interface name="velocity" />
-            <state_interface name="effort" />
-        </joint>
-        <joint name="robotiq_85_left_finger_tip_joint">
-            <!-- <param name="mimic">robotiq_85_left_knuckle_joint</param>
-            <param name="multiplier">-1</param> -->
-            <command_interface name="position" />
-            <state_interface name="position" />
-            <state_interface name="velocity" />
-            <state_interface name="effort" />
-        </joint>
-        <joint name="robotiq_85_right_finger_tip_joint">
-            <!-- <param name="mimic">robotiq_85_left_knuckle_joint</param>
-            <param name="multiplier">1</param> -->
-            <command_interface name="position" />
-            <state_interface name="position" />
-            <state_interface name="velocity" />
-            <state_interface name="effort" />
-        </joint>
-    </ros2_control>
+    <!-- <xacro:arg name="ur_parent" default="hdz_ur_base_link" />
+    <xacro:include filename="$(find ur_perception_description)/urdf/ur5e.urdf.xacro" /> -->
 
 
     <!-- d435i model -->
-    <xacro:arg name="use_nominal_extrinsics" default="false" />
+    <!-- <xacro:arg name="use_nominal_extrinsics" default="false" />
     <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
     <xacro:sensor_d435i parent="base"
         use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
         <origin xyz="0.0 0.0 2" rpy="0.0 ${pi/2} 0.0" />
-    </xacro:sensor_d435i>
+    </xacro:sensor_d435i> -->
 
     <!-- gazebo camera -->
-    <joint name="camera_optical_joint" type="fixed">
+    <!-- <joint name="camera_optical_joint" type="fixed">
         <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
         <parent link="camera_link" />
         <child link="camera_link_optical" />
-    </joint>
+    </joint> -->
 
-    <link name="camera_link_optical"></link>
+    <!-- <link name="camera_link_optical"></link> -->
 
     <!-- Add a gazebo tag for the ORIGINAL camera_link (but in the plugin we reference the optical
     frame so that ROS can orient things correctly) -->
@@ -101,7 +48,7 @@
     plugin needs. -->
     <!-- Note that although visualise is set to true, it won't actually visualise the depth camera
     in gazebo. To see the preview, try swapping "depth" to "camera"-->
-    <gazebo reference="camera_link">
+    <!-- <gazebo reference="camera_link">
         <sensor type="depth" name="my_camera">
             <update_rate>20</update_rate>
             <visualize>true</visualize>
@@ -128,6 +75,6 @@
                 <max_depth>500</max_depth>
             </plugin>
         </sensor>
-    </gazebo>
+    </gazebo> -->
 
 </robot>
