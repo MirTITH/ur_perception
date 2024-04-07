@@ -13,8 +13,8 @@ kThisPackageName = "ur_perception_gazebo_sim"
 def generate_launch_description():
     launch_entities = []
 
-    gazebo_world = ""
-    # gazebo_world = os.path.join(get_package_share_directory(kThisPackageName), "gazebo_world/cafe_earthquake.xml")
+    # gazebo_world = ""
+    gazebo_world = os.path.join(get_package_share_directory(kThisPackageName), "gazebo_world/cafe_earthquake.xml")
 
     ur_sim_gazebo_launch_file = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
