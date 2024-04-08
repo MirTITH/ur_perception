@@ -29,13 +29,13 @@ def generate_launch_description():
     )
     launch_entities.append(ur_sim_gazebo_launch_file)
 
-    launch_entities.append(
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=["gripper_controller", "-c", "/controller_manager"],
-        )
-    )
+    # launch_entities.append(
+    #     Node(
+    #         package="controller_manager",
+    #         executable="spawner",
+    #         arguments=["gripper_controller", "-c", "/controller_manager"],
+    #     )
+    # )
 
     # rviz
     rviz_config_file = os.path.join(get_package_share_directory(kThisPackageName), "rviz", "view_robot_perception.rviz")
