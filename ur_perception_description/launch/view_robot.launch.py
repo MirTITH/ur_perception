@@ -15,10 +15,22 @@ def generate_launch_description():
     launch_entities = []
 
     launch_entities.append(
+        DeclareLaunchArgument(
+            "use_sim_time",
+            description="Use simulation (Gazebo) clock if true",
+            choices=["true", "false"],
+            default_value="false",
+        )
+    )
+
+    launch_entities.append(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 [os.path.join(get_package_share_directory(kThisPackageName), "launch/robot_state_publisher.launch.py")]
-            )
+            ),
+            launch_arguments={
+                "use_sim_time": LaunchConfiguration("use_sim_time"),
+            }.items(),
         )
     )
 
@@ -26,6 +38,7 @@ def generate_launch_description():
         Node(
             package="joint_state_publisher_gui",
             executable="joint_state_publisher_gui",
+            parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
         )
     )
 
@@ -37,6 +50,7 @@ def generate_launch_description():
             name="rviz2",
             output="log",
             arguments=["-d", rviz_config_file],
+            parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
         )
     )
 

@@ -81,6 +81,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
       Mass Properties:
         Inertia: false
         Mass: false
@@ -104,25 +108,28 @@ Visualization Manager:
           Value: true
         hdz_ur_control_cabinet_link:
           Value: true
+        world:
+          Value: true
       Marker Scale: 0.4000000059604645
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        hdz_base_link:
-          hdz_extend_board_link:
-            hdz_steel_frame_link:
-              hdz_ur_control_cabinet_link:
+        world:
+          hdz_base_link:
+            hdz_extend_board_link:
+              hdz_steel_frame_link:
+                hdz_ur_control_cabinet_link:
+                  {}
+              hdz_ur_base_link:
                 {}
-            hdz_ur_base_link:
-              {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 63; 98; 109
-    Fixed Frame: hdz_base_link
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -134,7 +141,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.9024455547332764
+      Distance: 5.115101337432861
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -149,10 +156,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4400002956390381
+      Pitch: 0.050000499933958054
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.2918732166290283
+      Yaw: 1.3518731594085693
     Saved: ~
 Window Geometry:
   Displays:

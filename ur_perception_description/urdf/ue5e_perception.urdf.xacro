@@ -3,78 +3,15 @@
 <robot name="ur5e_rgbd" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <!-- create link fixed to the "world" -->
     <link name="world" />
-    <link name="robot_base" />
-    <joint name="robot_base_joint" type="fixed">
-        <parent link="world" />
-        <child link="robot_base" />
-        <origin xyz="0.0 0.62 0.19" rpy="0.0 0.0 -1.66" />
-    </joint>
-
 
     <!-- 撼地者 -->
-    <xacro:include filename="$(find hdz_simplified)/urdf/hdz_simplified.xacro" />
-    <joint name="hdz_joint" type="fixed">
-        <parent link="robot_base" />
-        <child link="hdz_base_link" />
-        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-    </joint>
+    <xacro:arg name="hdz_tf_prefix" default="hdz_" />
+    <xacro:include filename="$(find ur_perception_description)/urdf/hdz.urdf.xacro" />
 
-    <!-- UR model -->
-    <xacro:arg name="ur_parent" default="hdz_ur_base_link" />
+    <!-- UR arm -->
+    <xacro:arg name="ur_parent" default="$(arg hdz_tf_prefix)ur_base_link" />
     <xacro:include filename="$(find ur_perception_description)/urdf/ur5e.urdf.xacro" />
 
-
-    <!-- d435i model -->
-    <xacro:arg name="use_nominal_extrinsics" default="false" />
-    <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
-    <xacro:sensor_d435i parent="base"
-        use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
-        <origin xyz="0.0 0.0 2" rpy="0.0 ${pi/2} 0.0" />
-    </xacro:sensor_d435i>
-
-    <!-- gazebo camera -->
-    <joint name="camera_optical_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
-        <parent link="camera_link" />
-        <child link="camera_link_optical" />
-    </joint>
-
-    <link name="camera_link_optical"></link>
-
-    <!-- Add a gazebo tag for the ORIGINAL camera_link (but in the plugin we reference the optical
-    frame so that ROS can orient things correctly) -->
-    <!-- Within the gazebo tag we have the sensor tag, and inside that there is (among other things)
-    the camera tag with the camera parameters, and the plugin tag with some extra parameters the
-    plugin needs. -->
-    <!-- Note that although visualise is set to true, it won't actually visualise the depth camera
-    in gazebo. To see the preview, try swapping "depth" to "camera"-->
-    <gazebo reference="camera_link">
-        <sensor type="depth" name="my_camera">
-            <update_rate>20</update_rate>
-            <visualize>true</visualize>
-            <camera name="cam">
-                <horizontal_fov>1.3962634</horizontal_fov>
-                <image>
-                    <width>640</width>
-                    <height>480</height>
-                    <format>R8G8B8</format>
-                </image>
-                <clip>
-                    <near>0.02</near>
-                    <far>300</far>
-                </clip>
-                <noise>
-                    <type>gaussian</type>
-                    <mean>0.0</mean>
-                    <stddev>0.007</stddev>
-                </noise>
-            </camera>
-            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-                <frame_name>camera_link_optical</frame_name>
-                <min_depth>0.1</min_depth>
-                <max_depth>500</max_depth>
-            </plugin>
-        </sensor>
-    </gazebo>
-
+    <!-- d435i depth camera -->
+    <xacro:include filename="$(find ur_perception_description)/urdf/d435i.xacro" />
 </robot>
