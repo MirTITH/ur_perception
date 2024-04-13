@@ -4,7 +4,7 @@
   <name>ur_perception_moveit_config</name>
   <version>0.3.0</version>
   <description>
-     An automatically generated package with all the configuration and launch files for using the ur5e_rgbd with the MoveIt Motion Planning Framework
+     An automatically generated package with all the configuration and launch files for using the hdz_with_ur with the MoveIt Motion Planning Framework
   </description>
   <maintainer email="1023515576@qq.com">Yang Xie</maintainer>
 
@@ -42,7 +42,7 @@
   <exec_depend>rviz_default_plugins</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>ur_perception_description</exec_depend>
-  <!-- <exec_depend>warehouse_ros_mongo</exec_depend> -->
+  <exec_depend>warehouse_ros_mongo</exec_depend>
 
 
   <export>

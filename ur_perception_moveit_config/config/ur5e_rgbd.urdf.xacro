@@ -3,7 +3,7 @@
     <xacro:arg name="moveit_initial_positions_file" default="$(find ur_perception_moveit_config)/config/initial_positions.yaml" />
 
     <!-- Import ur5e_rgbd urdf file -->
-    <xacro:include filename="$(find ur_perception_description)/urdf/ue5e_perception.urdf.xacro" />
+    <xacro:include filename="$(find ur_perception_description)/urdf/hdz_with_ur.urdf.xacro" />
 
     <!-- Import control_xacro -->
     <xacro:include filename="ur5e_rgbd.ros2_control.xacro" />

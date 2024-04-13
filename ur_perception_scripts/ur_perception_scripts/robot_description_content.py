@@ -5,7 +5,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def get_robot_description_content(
     xacro_path=os.path.join(
-        get_package_share_directory("ur_perception_description"), "urdf/ue5e_perception.urdf.xacro"
+        get_package_share_directory("ur_perception_description"), "urdf/hdz_with_ur.urdf.xacro"
     ),
     sim_gazebo=None,
     sim_ignition=None,

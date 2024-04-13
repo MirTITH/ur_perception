@@ -1,10 +1,10 @@
 moveit_setup_assistant_config:
   urdf:
     package: ur_perception_description
-    relative_path: urdf/ue5e_perception.urdf.xacro
+    relative_path: urdf/hdz_with_ur.urdf.xacro
   srdf:
     relative_path: config/ur5e_rgbd.srdf
   package_settings:
     author_name: Yang Xie
     author_email: 1023515576@qq.com
-    generated_timestamp: 1712246214
+    generated_timestamp: 1712998137

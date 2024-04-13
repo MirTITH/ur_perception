@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<robot name="ur5e_rgbd" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="hdz_with_ur" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <!-- create link fixed to the "world" -->
     <link name="world" />
 
-    <!-- 撼地者 -->
+    <!-- 撼地者 (hdz) -->
     <xacro:arg name="hdz_tf_prefix" default="hdz_" />
     <xacro:include filename="$(find ur_perception_description)/urdf/hdz.urdf.xacro" />
 

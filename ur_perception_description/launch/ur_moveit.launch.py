@@ -42,7 +42,7 @@ from ur_moveit_config.launch_common import load_yaml
 from ament_index_python.packages import get_package_share_directory
 import yaml
 
-kThisPackageName = "ur_perception_moveit_launcher"
+kThisPackageName = "ur_perception_description"
 
 
 def load_yaml2(file_path):
@@ -61,10 +61,12 @@ def launch_setup(context, *args, **kwargs):
     moveit_config_package = LaunchConfiguration("moveit_config_package")
     moveit_config_file = LaunchConfiguration("moveit_config_file")
     warehouse_sqlite_path = LaunchConfiguration("warehouse_sqlite_path")
-    prefix = LaunchConfiguration("prefix")
     use_sim_time = LaunchConfiguration("use_sim_time")
     launch_rviz = LaunchConfiguration("launch_rviz")
     launch_servo = LaunchConfiguration("launch_servo")
+
+    robot_description_content = LaunchConfiguration("robot_description_content")
+    robot_description = {"robot_description": robot_description_content}
 
     # MoveIt Configuration
     robot_description_semantic_content = Command(
@@ -72,15 +74,6 @@ def launch_setup(context, *args, **kwargs):
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution([FindPackageShare(kThisPackageName), "srdf", moveit_config_file]),
-            " ",
-            "name:=",
-            # Also ur_type parameter could be used but then the planning group names in yaml
-            # configs has to be updated!
-            "ur",
-            " ",
-            "prefix:=",
-            prefix,
-            " ",
         ]
     )
     robot_description_semantic = {"robot_description_semantic": robot_description_semantic_content}
@@ -146,7 +139,7 @@ def launch_setup(context, *args, **kwargs):
         executable="move_group",
         output="screen",
         parameters=[
-            # robot_description,
+            robot_description,
             robot_description_semantic,
             robot_description_kinematics,
             # robot_description_planning,
@@ -173,12 +166,13 @@ def launch_setup(context, *args, **kwargs):
         output="log",
         arguments=["-d", rviz_config_file],
         parameters=[
-            # robot_description,
+            robot_description,
             robot_description_semantic,
             ompl_planning_pipeline_config,
             robot_description_kinematics,
             # robot_description_planning,
             warehouse_ros_config,
+            {"use_sim_time": use_sim_time},
         ],
     )
 
@@ -191,8 +185,9 @@ def launch_setup(context, *args, **kwargs):
         executable="servo_node_main",
         parameters=[
             servo_params,
-            # robot_description,
+            robot_description,
             robot_description_semantic,
+            {"use_sim_time": use_sim_time},
         ],
         output="screen",
     )
@@ -245,15 +240,6 @@ def generate_launch_description():
             "use_sim_time",
             default_value="false",
             description="Make MoveIt to use simulation time. This is needed for the trajectory planing in simulation.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "prefix",
-            default_value='""',
-            description="Prefix of the joint names, useful for \
-        multi-robot setup. If changed than also joint names in the controllers' configuration \
-        have to be updated.",
         )
     )
     declared_arguments.append(DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?"))

@@ -38,22 +38,15 @@ kThisPackageName = "ur_perception_gazebo_sim"
 
 
 def launch_setup(context, *args, **kwargs):
-    ur_type = LaunchConfiguration("ur_type")
-    safety_limits = LaunchConfiguration("safety_limits")
-    prefix = LaunchConfiguration("prefix")
-
     ur_control_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([FindPackageShare(kThisPackageName), "/launch", "/sim_control.launch.py"])
     )
 
     ur_moveit_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [FindPackageShare("ur_perception_moveit_launcher"), "/launch", "/ur_moveit.launch.py"]
+            [FindPackageShare("ur_perception_description"), "/launch", "/ur_moveit.launch.py"]
         ),
         launch_arguments={
-            "ur_type": ur_type,
-            "safety_limits": safety_limits,
-            "prefix": prefix,
             "use_sim_time": "true",
             "launch_rviz": "true",
             "launch_servo": "false",
@@ -71,29 +64,5 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "ur_type",
-            description="Type/series of used UR robot.",
-            choices=["ur3", "ur3e", "ur5", "ur5e", "ur10", "ur10e", "ur16e"],
-            default_value="ur5e",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "safety_limits",
-            default_value="true",
-            description="Enables the safety limits controller if true.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "prefix",
-            default_value='""',
-            description="Prefix of the joint names, useful for \
-        multi-robot setup. If changed than also joint names in the controllers' configuration \
-        have to be updated.",
-        )
-    )
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

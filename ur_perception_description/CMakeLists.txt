@@ -16,6 +16,7 @@ install(DIRECTORY
   urdf
   rviz
   config
+  srdf
   DESTINATION share/${PROJECT_NAME}
 )
 
