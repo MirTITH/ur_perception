@@ -15,6 +15,7 @@ install(DIRECTORY
   launch
   rviz
   gazebo_world
+  config
   DESTINATION share/${PROJECT_NAME}
 )
 

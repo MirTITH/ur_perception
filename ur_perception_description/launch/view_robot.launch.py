@@ -22,6 +22,15 @@ def generate_launch_description():
             default_value="false",
         )
     )
+    use_sim_time = LaunchConfiguration("use_sim_time")
+
+    launch_entities.append(
+        ExecuteProcess(
+            cmd=["echo", " use_sim_time: ", use_sim_time],
+            output="both",
+            name=__file__,
+        )
+    )
 
     launch_entities.append(
         IncludeLaunchDescription(
@@ -29,7 +38,7 @@ def generate_launch_description():
                 [os.path.join(get_package_share_directory(kThisPackageName), "launch/robot_state_publisher.launch.py")]
             ),
             launch_arguments={
-                "use_sim_time": LaunchConfiguration("use_sim_time"),
+                "use_sim_time": use_sim_time,
             }.items(),
         )
     )
@@ -38,7 +47,7 @@ def generate_launch_description():
         Node(
             package="joint_state_publisher_gui",
             executable="joint_state_publisher_gui",
-            parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
+            parameters=[{"use_sim_time": use_sim_time}],
         )
     )
 
@@ -50,7 +59,7 @@ def generate_launch_description():
             name="rviz2",
             output="log",
             arguments=["-d", rviz_config_file],
-            parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
+            parameters=[{"use_sim_time": use_sim_time}],
         )
     )
 
