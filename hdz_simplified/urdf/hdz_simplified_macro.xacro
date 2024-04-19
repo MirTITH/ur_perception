@@ -107,7 +107,7 @@
             type="fixed">
             <origin
                 xyz="0.13075 0 -0.09"
-                rpy="0 0 0" />
+                rpy="0 0 ${pi}" />
             <parent
                 link="${tf_prefix}extend_board_link" />
             <child

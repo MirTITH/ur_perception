@@ -2,6 +2,6 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
     <xacro:include filename="$(find hdz_simplified)/urdf/hdz_simplified_macro.xacro" />
     <xacro:hdz_simplified parent="world" tf_prefix="$(arg hdz_tf_prefix)">
-        <origin xyz="0.0 0.62 0.19" rpy="0.0 0.0 -1.66" />  <!-- 撼地者的位置 -->
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />  <!-- 撼地者的位置 -->
     </xacro:hdz_simplified>
 </robot>

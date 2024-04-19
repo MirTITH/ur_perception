@@ -313,7 +313,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "safety_limits",
-            default_value="true",
+            default_value="false",
             description="Enables the safety limits controller if true.",
         )
     )
@@ -335,7 +335,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "runtime_config_package",
-            default_value="ur_robot_driver",
+            default_value="ur_perception_description",
             description='Package with the controller\'s configuration in "config" folder. \
         Usually the argument is not set, it enables use of a custom setup.',
         )
