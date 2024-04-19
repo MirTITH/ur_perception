@@ -7,6 +7,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 import os
 from typing import Tuple, Dict, List
+from ur_perception_scripts import get_robot_description_content
 
 kThisPackageName = "ur_perception_description"
 
@@ -33,13 +34,16 @@ def generate_launch_description():
     )
 
     launch_entities.append(
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [os.path.join(get_package_share_directory(kThisPackageName), "launch/robot_state_publisher.launch.py")]
-            ),
-            launch_arguments={
-                "use_sim_time": use_sim_time,
-            }.items(),
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            output="both",
+            parameters=[
+                {
+                    "robot_description": get_robot_description_content(),
+                    "use_sim_time": use_sim_time,
+                }
+            ],
         )
     )
 

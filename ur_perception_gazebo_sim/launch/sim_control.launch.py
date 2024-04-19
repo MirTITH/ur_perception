@@ -16,6 +16,7 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.event_handlers import OnExecutionComplete, OnProcessExit, OnProcessIO, OnProcessStart, OnShutdown
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from ur_perception_scripts import get_robot_description_content
 
 kThisPackageName = "ur_perception_gazebo_sim"
 
@@ -72,27 +73,26 @@ def generate_launch_description():
     )
 
     # Robot State Publisher
-    # This launch file will set argument 'robot_description_content'
+    robot_description_content = get_robot_description_content(
+        sim_gazebo="true",
+        simulation_controllers=PathJoinSubstitution(
+            [FindPackageShare(kThisPackageName), "config", "ur_controllers.yaml"],
+        ),
+    )
+
     launch_entities.append(
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [
-                    os.path.join(
-                        get_package_share_directory("ur_perception_description"),
-                        "launch/robot_state_publisher.launch.py",
-                    )
-                ]
-            ),
-            launch_arguments={
-                "use_sim_time": use_sim_time,
-                "sim_gazebo": "true",
-                "simulation_controllers": PathJoinSubstitution(
-                    [FindPackageShare(kThisPackageName), "config", "ur_controllers.yaml"]
-                ),
-            }.items(),
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            output="both",
+            parameters=[
+                {
+                    "robot_description": robot_description_content,
+                    "use_sim_time": use_sim_time,
+                }
+            ],
         )
     )
-    # robot_description_content = LaunchConfiguration("robot_description_content")
 
     # Spawn robot
     robot_spawn_action = Node(

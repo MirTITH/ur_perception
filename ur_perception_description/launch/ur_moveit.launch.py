@@ -65,8 +65,8 @@ def launch_setup(context, *args, **kwargs):
     launch_rviz = LaunchConfiguration("launch_rviz")
     launch_servo = LaunchConfiguration("launch_servo")
 
-    robot_description_content = LaunchConfiguration("robot_description_content")
-    robot_description = {"robot_description": robot_description_content}
+    # robot_description_content = LaunchConfiguration("robot_description_content")
+    # robot_description = {"robot_description": robot_description_content}
 
     # MoveIt Configuration
     robot_description_semantic_content = Command(
@@ -139,7 +139,7 @@ def launch_setup(context, *args, **kwargs):
         executable="move_group",
         output="screen",
         parameters=[
-            robot_description,
+            # robot_description,
             robot_description_semantic,
             robot_description_kinematics,
             # robot_description_planning,
@@ -166,7 +166,7 @@ def launch_setup(context, *args, **kwargs):
         output="log",
         arguments=["-d", rviz_config_file],
         parameters=[
-            robot_description,
+            # robot_description,
             robot_description_semantic,
             ompl_planning_pipeline_config,
             robot_description_kinematics,
@@ -185,7 +185,7 @@ def launch_setup(context, *args, **kwargs):
         executable="servo_node_main",
         parameters=[
             servo_params,
-            robot_description,
+            # robot_description,
             robot_description_semantic,
             {"use_sim_time": use_sim_time},
         ],
