@@ -13,8 +13,11 @@
     <xacro:include filename="$(find ur_perception_description)/urdf/ur5e.urdf.xacro" />
 
     <!-- RobotIQ Gripper -->
-    <xacro:include filename="$(find ur_perception_description)/urdf/robotiq.urdf.xacro" />
-
+    <!-- <xacro:include filename="$(find ur_perception_description)/urdf/robotiq.xacro" /> -->
+    
+    <!-- DH Robotics AG95 Gripper -->
+    <xacro:include filename="$(find ur_perception_description)/urdf/dh_ag95_gripper.xacro" />
+    
     <!-- d435i depth camera -->
     <xacro:include filename="$(find ur_perception_description)/urdf/d435i.xacro" />
 </robot>

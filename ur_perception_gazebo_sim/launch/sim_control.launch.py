@@ -63,8 +63,8 @@ def generate_launch_description():
     # Arguments end
 
     # Gazebo
-    # gazebo_world = ""
-    gazebo_world = os.path.join(get_package_share_directory(kThisPackageName), "gazebo_world/cafe_earthquake.xml")
+    gazebo_world = ""
+    # gazebo_world = os.path.join(get_package_share_directory(kThisPackageName), "gazebo_world/cafe_earthquake.xml")
     launch_entities.append(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([FindPackageShare("gazebo_ros"), "/launch", "/gazebo.launch.py"]),
