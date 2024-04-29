@@ -12,6 +12,9 @@
     <xacro:arg name="ur_parent" default="$(arg hdz_tf_prefix)ur_base_link" />
     <xacro:include filename="$(find ur_perception_description)/urdf/ur5e.urdf.xacro" />
 
+    <!-- RobotIQ Gripper -->
+    <xacro:include filename="$(find ur_perception_description)/urdf/robotiq.urdf.xacro" />
+
     <!-- d435i depth camera -->
     <xacro:include filename="$(find ur_perception_description)/urdf/d435i.xacro" />
 </robot>
