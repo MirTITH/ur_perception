@@ -13,12 +13,13 @@ from launch.actions import (
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch.event_handlers import OnExecutionComplete, OnProcessExit, OnProcessIO, OnProcessStart, OnShutdown
+from launch.event_handlers import OnExecutionComplete
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-from ur_perception_scripts import get_robot_description_content
 
-kThisPackageName = "ur_perception_gazebo_sim"
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
+
+kThisPackageName = "dh_robotics_ag95_description"
 
 
 def generate_launch_description():
@@ -45,26 +46,10 @@ def generate_launch_description():
         )
     )
 
-    launch_entities.append(
-        DeclareLaunchArgument(
-            "initial_joint_controller",
-            default_value="joint_trajectory_controller",
-            description="Robot controller to start.",
-        )
-    )
-    launch_entities.append(
-        DeclareLaunchArgument(
-            "start_joint_controller",
-            default_value="true",
-            description="Enable headless mode for robot control",
-        )
-    )
-
     # Arguments end
 
     # Gazebo
     gazebo_world = ""
-    # gazebo_world = os.path.join(get_package_share_directory(kThisPackageName), "gazebo_world/cafe_earthquake.xml")
     launch_entities.append(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([FindPackageShare("gazebo_ros"), "/launch", "/gazebo.launch.py"]),
@@ -72,14 +57,17 @@ def generate_launch_description():
         )
     )
 
-    # Robot State Publisher
-    robot_description_content = get_robot_description_content(
-        sim_gazebo="true",
-        simulation_controllers=PathJoinSubstitution(
-            [FindPackageShare(kThisPackageName), "config", "ur_controllers.yaml"],
-        ),
+    # Robot Description
+    xacro_path = os.path.join(get_package_share_directory(kThisPackageName), "urdf", "dh_robotics_ag95_gripper.xacro")
+    robot_description_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            " ",
+            xacro_path,
+        ]
     )
 
+    # Robot State Publisher
     launch_entities.append(
         Node(
             package="robot_state_publisher",
@@ -98,7 +86,7 @@ def generate_launch_description():
     robot_spawn_action = Node(
         package="gazebo_ros",
         executable="spawn_entity.py",
-        arguments=["-entity", "hdz", "-topic", "robot_description"],
+        arguments=["-entity", "dh", "-topic", "robot_description"],
         output="screen",
     )
     launch_entities.append(
@@ -108,41 +96,15 @@ def generate_launch_description():
         )
     )
 
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
-    )
-    actions_after_robot_spawn.append(joint_state_broadcaster_spawner)
+    # actions_after_robot_spawn.append(
+    #     Node(
+    #         package="controller_manager",
+    #         executable="spawner",
+    #         arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+    #     )
+    # )
 
-    # There may be other controllers of the joints, but this is the initially-started one
-    initial_joint_controller = LaunchConfiguration("initial_joint_controller")
-    actions_after_robot_spawn.append(
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=[initial_joint_controller, "-c", "/controller_manager"],
-            condition=IfCondition(LaunchConfiguration("start_joint_controller")),
-        )
-    )
-    actions_after_robot_spawn.append(
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=[initial_joint_controller, "-c", "/controller_manager", "--stopped"],
-            condition=UnlessCondition(LaunchConfiguration("start_joint_controller")),
-        )
-    )
-    actions_after_robot_spawn.append(
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=["gripper_controller", "-c", "/controller_manager"],
-        )
-    )
-
-    # Gripper
-    # delayed_actions2.append(
+    # actions_after_robot_spawn.append(
     #     Node(
     #         package="controller_manager",
     #         executable="spawner",
@@ -151,12 +113,11 @@ def generate_launch_description():
     # )
 
     # rviz
-    rviz_config_file = os.path.join(get_package_share_directory(kThisPackageName), "rviz", "view_robot_perception.rviz")
+    rviz_config_file = os.path.join(get_package_share_directory(kThisPackageName), "config", "view_robot.rviz")
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
         name="rviz2",
-        # output="log",
         arguments=["-d", rviz_config_file],
         parameters=[{"use_sim_time": True}],
     )

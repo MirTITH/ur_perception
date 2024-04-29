@@ -2,7 +2,10 @@
 
 
 <robot name="dh_robotics_ag95_gripper" xmlns:xacro="http://ros.org/wiki/xacro">
-    <!-- <xacro:include filename="$(find dh_robotics_ag95_description)/urdf/dh_robotics_ag95_gripper.transmission.xacro" /> -->
+    <!-- <xacro:include filename="$(find
+    dh_robotics_ag95_description)/urdf/dh_robotics_ag95_gripper.transmission.xacro" /> -->
+    <xacro:include
+        filename="$(find dh_robotics_ag95_description)/urdf/dh_robotics_ag95_gripper_ros2_control.xacro" />
 
     <xacro:macro name="material_black">
         <material name="">
@@ -394,6 +397,6 @@
         </gazebo>
 
         <!-- <xacro:dh_robotics_ag95_gripper_transmission prefix="${prefix}" /> -->
-
+        <xacro:dh_robotics_ag95_gripper_ros2_control prefix="${prefix}" />
     </xacro:macro>
 </robot>
