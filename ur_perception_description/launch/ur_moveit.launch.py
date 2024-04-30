@@ -79,7 +79,7 @@ def launch_setup(context, *args, **kwargs):
     robot_description_semantic = {"robot_description_semantic": robot_description_semantic_content}
 
     robot_description_kinematics = PathJoinSubstitution(
-        [FindPackageShare(moveit_config_package), "config", "kinematics.yaml"]
+        [FindPackageShare(kThisPackageName), "config", "kinematics.yaml"]
     )
 
     # robot_description_planning = {
@@ -94,7 +94,7 @@ def launch_setup(context, *args, **kwargs):
             "start_state_max_bounds_error": 0.1,
         }
     }
-    ompl_planning_yaml = load_yaml("ur_moveit_config", "config/ompl_planning.yaml")
+    ompl_planning_yaml = load_yaml(kThisPackageName, "config/ompl_planning.yaml")
     ompl_planning_pipeline_config["move_group"].update(ompl_planning_yaml)
 
     # Trajectory Execution Configuration
@@ -141,6 +141,7 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             # robot_description,
             robot_description_semantic,
+            {"publish_robot_description_semantic": True},
             robot_description_kinematics,
             # robot_description_planning,
             ompl_planning_pipeline_config,
