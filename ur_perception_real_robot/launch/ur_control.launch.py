@@ -53,9 +53,9 @@ def launch_setup(context, *args, **kwargs):
     # joint_limit_params = PathJoinSubstitution(
     #     [FindPackageShare(description_package), "config", ur_type, "joint_limits.yaml"]
     # )
-    # kinematics_params = PathJoinSubstitution(
-    #     [FindPackageShare(description_package), "config", ur_type, "default_kinematics.yaml"]
-    # )
+    kinematics_params = PathJoinSubstitution(
+        [FindPackageShare("ur_perception_description"), "config", ur_type, "ur5e_calibration.yaml"]
+    )
     # physical_params = PathJoinSubstitution(
     #     [FindPackageShare(description_package), "config", ur_type, "physical_parameters.yaml"]
     # )
@@ -98,6 +98,7 @@ def launch_setup(context, *args, **kwargs):
         reverse_port=reverse_port,
         script_sender_port=script_sender_port,
         trajectory_port=trajectory_port,
+        kinematics_params=kinematics_params
     )
 
     robot_state_publisher_node = Node(

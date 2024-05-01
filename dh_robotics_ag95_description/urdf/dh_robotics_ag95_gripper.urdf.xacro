@@ -397,6 +397,7 @@
         </gazebo>
 
         <!-- <xacro:dh_robotics_ag95_gripper_transmission prefix="${prefix}" /> -->
-        <xacro:dh_robotics_ag95_gripper_ros2_control prefix="${prefix}" />
+        <xacro:arg name="sim_gazebo" default="false" />
+        <xacro:dh_robotics_ag95_gripper_ros2_control prefix="${prefix}" sim_gazebo="$(arg sim_gazebo)" />
     </xacro:macro>
 </robot>

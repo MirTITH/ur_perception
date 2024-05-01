@@ -47,6 +47,19 @@ def generate_launch_description():
         )
     )
 
+    # Already hard-coded in d435i.xacro file, so no need to launch it here
+
+    # launch_entities.append(
+    #     IncludeLaunchDescription(
+    #         PythonLaunchDescriptionSource(
+    #             os.path.join(get_package_share_directory("easy_handeye2"), "launch", "publish.launch.py")
+    #         ),
+    #         launch_arguments={
+    #             "name": "hdz_handeye2",
+    #         }.items(),
+    #     )
+    # )
+
     launch_entities.append(
         Node(
             package="joint_state_publisher_gui",

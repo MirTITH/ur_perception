@@ -12,7 +12,7 @@ Panels:
         - /TF1/Frames1
         - /TF1/Tree1
       Splitter Ratio: 0.5
-    Tree Height: 400
+    Tree Height: 364
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
@@ -79,10 +79,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_link_optical:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         flange:
           Alpha: 1
           Show Axes: false
@@ -96,6 +92,51 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        gripper_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_finger1_finger_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_finger1_finger_tip_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_finger1_inner_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_finger1_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_finger2_finger_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_finger2_finger_tip_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_finger2_inner_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_finger2_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         hdz_base_link:
           Alpha: 1
           Show Axes: false
@@ -116,51 +157,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
         hdz_ur_control_cabinet_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_left_finger_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_left_finger_tip_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_left_inner_knuckle_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_left_knuckle_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_right_finger_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_right_finger_tip_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_right_inner_knuckle_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_right_knuckle_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -221,13 +217,29 @@ Visualization Manager:
           Value: true
         camera_link:
           Value: true
-        camera_link_optical:
-          Value: true
         flange:
           Value: true
         forearm_link:
           Value: true
         ft_frame:
+          Value: true
+        gripper_base_link:
+          Value: true
+        gripper_finger1_finger_link:
+          Value: true
+        gripper_finger1_finger_tip_link:
+          Value: true
+        gripper_finger1_inner_knuckle_link:
+          Value: true
+        gripper_finger1_knuckle_link:
+          Value: true
+        gripper_finger2_finger_link:
+          Value: true
+        gripper_finger2_finger_tip_link:
+          Value: true
+        gripper_finger2_inner_knuckle_link:
+          Value: true
+        gripper_finger2_knuckle_link:
           Value: true
         hdz_base_link:
           Value: true
@@ -238,24 +250,6 @@ Visualization Manager:
         hdz_ur_base_link:
           Value: true
         hdz_ur_control_cabinet_link:
-          Value: true
-        robotiq_85_base_link:
-          Value: true
-        robotiq_85_left_finger_link:
-          Value: true
-        robotiq_85_left_finger_tip_link:
-          Value: true
-        robotiq_85_left_inner_knuckle_link:
-          Value: true
-        robotiq_85_left_knuckle_link:
-          Value: true
-        robotiq_85_right_finger_link:
-          Value: true
-        robotiq_85_right_finger_tip_link:
-          Value: true
-        robotiq_85_right_inner_knuckle_link:
-          Value: true
-        robotiq_85_right_knuckle_link:
           Value: true
         shoulder_link:
           Value: true
@@ -271,7 +265,7 @@ Visualization Manager:
           Value: true
         wrist_3_link:
           Value: true
-      Marker Scale: 0.4000000059604645
+      Marker Scale: 0.20000000298023224
       Name: TF
       Show Arrows: true
       Show Axes: true
@@ -286,10 +280,7 @@ Visualization Manager:
               hdz_ur_base_link:
                 base_link:
                   base:
-                    camera_bottom_screw_frame:
-                      camera_link:
-                        camera_link_optical:
-                          {}
+                    {}
                   base_link_inertia:
                     shoulder_link:
                       upper_arm_link:
@@ -299,19 +290,22 @@ Visualization Manager:
                               wrist_3_link:
                                 flange:
                                   tool0:
-                                    robotiq_85_base_link:
-                                      robotiq_85_left_inner_knuckle_link:
+                                    camera_bottom_screw_frame:
+                                      camera_link:
                                         {}
-                                      robotiq_85_left_knuckle_link:
-                                        robotiq_85_left_finger_link:
-                                          robotiq_85_left_finger_tip_link:
-                                            {}
-                                      robotiq_85_right_inner_knuckle_link:
-                                        {}
-                                      robotiq_85_right_knuckle_link:
-                                        robotiq_85_right_finger_link:
-                                          robotiq_85_right_finger_tip_link:
-                                            {}
+                                    gripper_base_link:
+                                      gripper_finger1_inner_knuckle_link:
+                                        gripper_finger1_finger_tip_link:
+                                          {}
+                                      gripper_finger1_knuckle_link:
+                                        gripper_finger1_finger_link:
+                                          {}
+                                      gripper_finger2_inner_knuckle_link:
+                                        gripper_finger2_finger_tip_link:
+                                          {}
+                                      gripper_finger2_knuckle_link:
+                                        gripper_finger2_finger_link:
+                                          {}
                                 ft_frame:
                                   {}
       Update Interval: 0
@@ -331,7 +325,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 4.00813627243042
+      Distance: 0.8118326663970947
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -346,20 +340,20 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4350005090236664
+      Pitch: -0.36999940872192383
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.051868200302124
+      Yaw: 3.801880121231079
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1051
+  Height: 999
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd000000010000000000000200000003a0fc0200000002fb000000100044006900730070006c0061007900730100000050000002380000010101000003fb0000000a00560069006500770073010000028900000167000000db010000030000057f000003a000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000001000000000000020000000368fc0200000002fb000000100044006900730070006c0061007900730100000052000002160000010301000003fb0000000a00560069006500770073010000026900000151000000df010000030000057f0000036800000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 1920
-  X: -33
-  Y: 23
+  X: 0
+  Y: 0

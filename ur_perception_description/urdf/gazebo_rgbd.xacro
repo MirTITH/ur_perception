@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- gazebo camera -->
+    <joint name="gazebo_camera_optical_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+        <parent link="camera_link" />
+        <child link="gazebo_camera_link_optical" />
+    </joint>
+
+    <link name="gazebo_camera_link_optical"></link>
+
+    <!-- Add a gazebo tag for the ORIGINAL camera_link (but in the plugin we reference the optical
+    frame so that ROS can orient things correctly) -->
+    <!-- Within the gazebo tag we have the sensor tag, and inside that there is (among other things)
+    the camera tag with the camera parameters, and the plugin tag with some extra parameters the
+    plugin needs. -->
+    <!-- Note that although visualise is set to true, it won't actually visualise the depth camera
+    in gazebo. To see the preview, try swapping "depth" to "camera"-->
+    <gazebo reference="camera_link">
+        <sensor type="depth" name="gazebo_camera">
+            <update_rate>20</update_rate>
+            <visualize>true</visualize>
+            <camera name="gz_cam">
+                <horizontal_fov>1.3962634</horizontal_fov>
+                <image>
+                    <width>640</width>
+                    <height>480</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.02</near>
+                    <far>300</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
+            </camera>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <frame_name>gazebo_camera_link_optical</frame_name>
+                <min_depth>0.1</min_depth>
+                <max_depth>500</max_depth>
+            </plugin>
+        </sensor>
+    </gazebo>
+</robot>
