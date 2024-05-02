@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(move_grasp_msg REQUIRED)
 
 add_executable(move_grasp src/move_grasp.cpp)
 target_include_directories(move_grasp PUBLIC
@@ -19,6 +20,7 @@ ament_target_dependencies(
   move_grasp
   "moveit_ros_planning_interface"
   "rclcpp"
+  "move_grasp_msg"
 )
 
 install(TARGETS move_grasp

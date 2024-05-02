@@ -9,6 +9,8 @@
 #include <moveit_msgs/msg/collision_object.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <cstdio>
+#include <move_grasp_msg/srv/move_to.hpp>
+#include <move_grasp_msg/srv/get_end_effector_pose.hpp>
 
 class MoveItNode : public rclcpp::Node
 {
@@ -16,14 +18,17 @@ public:
     std::shared_ptr<moveit::planning_interface::MoveGroupInterface> move_group;
 
 public:
-    MoveItNode(const std::string &node_name, const std::string &planning_group)
-        : Node(node_name, rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true)),
-
-          PLANNING_GROUP_(planning_group){};
+    MoveItNode(const std::string &node_name)
+        : Node(node_name, rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true))
+    {
+        this->declare_parameter("planning_group", "ur_manipulator");
+        planning_group_ = this->get_parameter("planning_group").as_string();
+        RCLCPP_INFO(get_logger(), "Planning group: %s", planning_group_.c_str());
+    }
 
     void Init()
     {
-        move_group = std::make_shared<moveit::planning_interface::MoveGroupInterface>(shared_from_this(), PLANNING_GROUP_);
+        move_group = std::make_shared<moveit::planning_interface::MoveGroupInterface>(shared_from_this(), planning_group_);
     }
 
     void SetTargetByName(const std::string &target)
@@ -58,7 +63,7 @@ public:
     void SetTargetPose(const geometry_msgs::msg::Pose &target_pose)
     {
         moveit::core::RobotState target_robot_state(*(move_group->getCurrentState()));
-        const moveit::core::JointModelGroup *joint_model_group = move_group->getCurrentState()->getJointModelGroup(PLANNING_GROUP_);
+        const moveit::core::JointModelGroup *joint_model_group = move_group->getCurrentState()->getJointModelGroup(planning_group_);
 
         auto ik_result = target_robot_state.setFromIK(joint_model_group, target_pose);
         RCLCPP_INFO_STREAM(get_logger(), "ik_result: " << ik_result);
@@ -77,6 +82,11 @@ public:
         move_group->setJointValueTarget(joint_group_positions);
     }
 
+    std::string GetPlanningGroup() const
+    {
+        return planning_group_;
+    }
+
     static void Print(const rclcpp::Logger &logger, const geometry_msgs::msg::PoseStamped &msg, const std::string &prefix = "")
     {
         RCLCPP_INFO(logger, "%sheader: {frame_id: %s, stamp: %d.%d}\npose: {position: [%lf, %lf, %lf], orientation: [%lf, %lf, %lf, %lf]}",
@@ -86,34 +96,76 @@ public:
     }
 
 private:
-    const std::string PLANNING_GROUP_;
+    std::string planning_group_;
+};
+
+class MoveGraspService : public rclcpp::Node
+{
+public:
+    MoveGraspService(const std::string &node_name, std::shared_ptr<MoveItNode> moveit_node)
+        : Node(node_name), moveit_node_(std::move(moveit_node))
+    {
+        move_to_service_               = this->create_service<move_grasp_msg::srv::MoveTo>("move_to", std::bind(&MoveGraspService::MoveToCallback, this, std::placeholders::_1, std::placeholders::_2));
+        get_end_effector_pose_service_ = this->create_service<move_grasp_msg::srv::GetEndEffectorPose>("get_end_effector_pose", std::bind(&MoveGraspService::GetEndEffectorPoseCallback, this, std::placeholders::_1, std::placeholders::_2));
+    }
+
+private:
+    std::shared_ptr<MoveItNode> moveit_node_;
+    rclcpp::Service<move_grasp_msg::srv::MoveTo>::SharedPtr move_to_service_;
+    rclcpp::Service<move_grasp_msg::srv::GetEndEffectorPose>::SharedPtr get_end_effector_pose_service_;
+
+    void GetEndEffectorPoseCallback(const std::shared_ptr<move_grasp_msg::srv::GetEndEffectorPose::Request> request, std::shared_ptr<move_grasp_msg::srv::GetEndEffectorPose::Response> response)
+    {
+        RCLCPP_INFO(get_logger(), "Received get_end_effector_pose request");
+        (void)request; // Unused
+        response->pose_stamped = moveit_node_->GetCurrentPose();
+        response->frame_name   = moveit_node_->move_group->getEndEffectorLink();
+    }
+
+    void MoveToCallback(const std::shared_ptr<move_grasp_msg::srv::MoveTo::Request> request, std::shared_ptr<move_grasp_msg::srv::MoveTo::Response> response)
+    {
+        RCLCPP_INFO(get_logger(), "Received move_to request");
+        try {
+            moveit_node_->SetTargetPose(request->pose);
+        } catch (const std::exception &e) {
+            response->is_success = false;
+            response->message    = e.what();
+            return;
+        }
+
+        try {
+            moveit_node_->PlanAndMove();
+        } catch (const std::exception &e) {
+            response->is_success = false;
+            response->message    = e.what();
+            return;
+        }
+
+        response->is_success = true;
+    }
 };
 
 int main(int argc, char *argv[])
 {
-    // Initialize ROS and create the Node
     rclcpp::init(argc, argv);
 
-    // Create a ROS logger
     auto const LOGGER = rclcpp::get_logger("move_grasp");
-    RCLCPP_INFO(LOGGER, "Starting MoveItNode");
-    auto const moveit_node = std::make_shared<MoveItNode>("move_grasp", "ur_manipulator");
-    moveit_node->Init();
-    RCLCPP_INFO(LOGGER, "MoveItNode Initialized");
 
-    // We spin up a SingleThreadedExecutor for the current state monitor to get information
-    // about the robot's state.
+    auto const moveit_node = std::make_shared<MoveItNode>("move_grasp");
+    moveit_node->Init();
+
+    auto const service_node = std::make_shared<MoveGraspService>("move_grasp_service", moveit_node);
+
+    // We spin up a SingleThreadedExecutor for the current state monitor to get information about the robot's state.
     rclcpp::executors::SingleThreadedExecutor executor;
     executor.add_node(moveit_node);
-    std::thread([&executor]() { executor.spin(); }).detach();
+    auto executor_thread = std::thread([&executor]() { executor.spin(); });
 
     // We can print the name of the reference frame for this robot.
     RCLCPP_INFO(LOGGER, "Planning frame: %s", moveit_node->move_group->getPlanningFrame().c_str());
-    // Planning frame: world
 
     // We can also print the name of the end-effector link for this group.
     RCLCPP_INFO(LOGGER, "End effector link: %s", moveit_node->move_group->getEndEffectorLink().c_str());
-    // End effector link: tool0
 
     // We can get a list of all the groups in the robot:
     std::stringstream ss;
@@ -122,16 +174,7 @@ int main(int argc, char *argv[])
               std::ostream_iterator<std::string>(ss, ", "));
     RCLCPP_INFO_STREAM(LOGGER, ss.str());
 
-    auto ee_pose = moveit_node->GetCurrentPose();
-    moveit_node->Print(LOGGER, ee_pose, "Current End Effector Pose: ");
-
-    // Set the target pose for the end effector
-    geometry_msgs::msg::Pose target_pose = ee_pose.pose;
-    target_pose.position.z += 0.1;
-
-    moveit_node->SetTargetPose(target_pose);
-
-    moveit_node->PlanAndMove();
+    rclcpp::spin(service_node);
 
     // Shutdown ROS
     rclcpp::shutdown();
