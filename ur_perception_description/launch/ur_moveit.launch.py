@@ -78,9 +78,9 @@ def launch_setup(context, *args, **kwargs):
     )
     robot_description_semantic = {"robot_description_semantic": robot_description_semantic_content}
 
-    robot_description_kinematics = PathJoinSubstitution(
-        [FindPackageShare(kThisPackageName), "config", "kinematics.yaml"]
-    )
+    kinematics_file = os.path.join(get_package_share_directory(kThisPackageName), "config", "kinematics.yaml")
+
+    robot_description_kinematics = load_yaml2(kinematics_file)
 
     # robot_description_planning = {
     # "robot_description_planning": load_yaml_abs(str(joint_limit_params.perform(context)))
@@ -142,7 +142,7 @@ def launch_setup(context, *args, **kwargs):
             # robot_description,
             robot_description_semantic,
             {"publish_robot_description_semantic": True},
-            robot_description_kinematics,
+            {"robot_description_kinematics": robot_description_kinematics},
             # robot_description_planning,
             ompl_planning_pipeline_config,
             trajectory_execution,
@@ -170,7 +170,7 @@ def launch_setup(context, *args, **kwargs):
             # robot_description,
             robot_description_semantic,
             ompl_planning_pipeline_config,
-            robot_description_kinematics,
+            {"robot_description_kinematics": robot_description_kinematics},
             # robot_description_planning,
             warehouse_ros_config,
             {"use_sim_time": use_sim_time},
