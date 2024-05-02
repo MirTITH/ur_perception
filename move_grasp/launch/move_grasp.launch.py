@@ -41,7 +41,7 @@ def generate_launch_description():
         Node(
             package=kThisPackageName,
             executable="move_grasp",
-            output="both",
+            # output="screen",
             parameters=[
                 {
                     "use_sim_time": use_sim_time,
