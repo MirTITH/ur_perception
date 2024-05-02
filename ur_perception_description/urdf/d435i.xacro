@@ -2,10 +2,19 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <xacro:arg name="use_nominal_extrinsics" default="false" />
+    <xacro:arg name="sim_gazebo" default="false" />
 
     <!-- d435i depth camera -->
     <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
     <xacro:sensor_d435i parent="tool0" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
         <origin xyz="-0.00235193 -0.06200663  0.02117095" rpy="-2.33887904 -1.56538734 -2.34484763" />
     </xacro:sensor_d435i>
+
+    <xacro:if value="$(arg sim_gazebo)">
+        <xacro:include filename="$(find ur_perception_description)/urdf/gazebo_rgbd.xacro" />
+        <xacro:gazebo_camera parent="tool0">
+            <origin xyz="-0.0345040364877853 -0.0759815185860376 0.03063655608100728"
+                rpy="${0.00336741+pi/2} ${-0.01153856-pi/2}  0.02297956" />
+        </xacro:gazebo_camera>
+    </xacro:if>
 </robot>
