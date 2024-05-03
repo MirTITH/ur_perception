@@ -39,7 +39,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 1
+    - Alpha: 0.699999988079071
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
       Description File: ""
@@ -89,6 +89,10 @@ Visualization Manager:
           Show Trail: false
           Value: true
         ft_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        grasp_center_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -206,65 +210,67 @@ Visualization Manager:
       Enabled: true
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
         base:
-          Value: true
+          Value: false
         base_link:
-          Value: true
+          Value: false
         base_link_inertia:
-          Value: true
+          Value: false
         camera_bottom_screw_frame:
-          Value: true
+          Value: false
         camera_link:
-          Value: true
+          Value: false
         flange:
-          Value: true
+          Value: false
         forearm_link:
-          Value: true
+          Value: false
         ft_frame:
+          Value: false
+        grasp_center_link:
           Value: true
         gripper_base_link:
-          Value: true
+          Value: false
         gripper_finger1_finger_link:
-          Value: true
+          Value: false
         gripper_finger1_finger_tip_link:
-          Value: true
+          Value: false
         gripper_finger1_inner_knuckle_link:
-          Value: true
+          Value: false
         gripper_finger1_knuckle_link:
-          Value: true
+          Value: false
         gripper_finger2_finger_link:
-          Value: true
+          Value: false
         gripper_finger2_finger_tip_link:
-          Value: true
+          Value: false
         gripper_finger2_inner_knuckle_link:
-          Value: true
+          Value: false
         gripper_finger2_knuckle_link:
-          Value: true
+          Value: false
         hdz_base_link:
-          Value: true
+          Value: false
         hdz_extend_board_link:
-          Value: true
+          Value: false
         hdz_steel_frame_link:
-          Value: true
+          Value: false
         hdz_ur_base_link:
-          Value: true
+          Value: false
         hdz_ur_control_cabinet_link:
-          Value: true
+          Value: false
         shoulder_link:
-          Value: true
+          Value: false
         tool0:
           Value: true
         upper_arm_link:
-          Value: true
+          Value: false
         world:
-          Value: true
+          Value: false
         wrist_1_link:
-          Value: true
+          Value: false
         wrist_2_link:
-          Value: true
+          Value: false
         wrist_3_link:
-          Value: true
+          Value: false
       Marker Scale: 0.20000000298023224
       Name: TF
       Show Arrows: true
@@ -293,6 +299,8 @@ Visualization Manager:
                                     camera_bottom_screw_frame:
                                       camera_link:
                                         {}
+                                    grasp_center_link:
+                                      {}
                                     gripper_base_link:
                                       gripper_finger1_inner_knuckle_link:
                                         gripper_finger1_finger_tip_link:
@@ -325,25 +333,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 0.8118326663970947
+      Distance: 0.6839924454689026
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.1519124060869217
-        Y: -0.15253570675849915
-        Z: 0.4500468969345093
+        X: -0.44617629051208496
+        Y: -0.3970435559749603
+        Z: 0.4055149257183075
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.36999940872192383
+      Pitch: 1.5347963571548462
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.801880121231079
+      Yaw: 3.016869306564331
     Saved: ~
 Window Geometry:
   Displays:

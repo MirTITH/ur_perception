@@ -12,12 +12,20 @@
     <xacro:arg name="ur_parent" default="$(arg hdz_tf_prefix)ur_base_link" />
     <xacro:include filename="$(find ur_perception_description)/urdf/ur5e.urdf.xacro" />
 
+    <link name="grasp_center_link" />
+    <joint name="grasp_center_joint" type="fixed">
+        <parent link="tool0" />
+        <child link="grasp_center_link" />
+        <origin xyz="0 0 0.18" rpy="0 0 0" />
+    </joint>
+
+
     <!-- RobotIQ Gripper -->
     <!-- <xacro:include filename="$(find ur_perception_description)/urdf/robotiq.xacro" /> -->
-    
+
     <!-- DH Robotics AG95 Gripper -->
     <xacro:include filename="$(find ur_perception_description)/urdf/dh_ag95_gripper.xacro" />
-    
+
     <!-- d435i depth camera -->
     <xacro:include filename="$(find ur_perception_description)/urdf/d435i.xacro" />
 </robot>

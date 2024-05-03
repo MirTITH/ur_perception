@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <move_grasp_msg/srv/move_to.hpp>
 #include <move_grasp_msg/srv/get_end_effector_pose.hpp>
+#include <move_grasp_msg/srv/move_to_named.hpp>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/buffer.h>
 #include <tf2/convert.h>
@@ -126,6 +127,7 @@ public:
         : Node(node_name), moveit_node_(std::move(moveit_node))
     {
         move_to_service_               = this->create_service<move_grasp_msg::srv::MoveTo>("move_to", std::bind(&MoveGraspService::MoveToCallback, this, std::placeholders::_1, std::placeholders::_2));
+        move_to_named_service_         = this->create_service<move_grasp_msg::srv::MoveToNamed>("move_to_named", std::bind(&MoveGraspService::MoveToNamedCallback, this, std::placeholders::_1, std::placeholders::_2));
         get_end_effector_pose_service_ = this->create_service<move_grasp_msg::srv::GetEndEffectorPose>("get_end_effector_pose", std::bind(&MoveGraspService::GetEndEffectorPoseCallback, this, std::placeholders::_1, std::placeholders::_2));
 
         tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
@@ -135,6 +137,7 @@ public:
 private:
     std::shared_ptr<MoveItNode> moveit_node_;
     rclcpp::Service<move_grasp_msg::srv::MoveTo>::SharedPtr move_to_service_;
+    rclcpp::Service<move_grasp_msg::srv::MoveToNamed>::SharedPtr move_to_named_service_;
     rclcpp::Service<move_grasp_msg::srv::GetEndEffectorPose>::SharedPtr get_end_effector_pose_service_;
     std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
@@ -146,11 +149,34 @@ private:
         response->pose_stamped = moveit_node_->GetCurrentPose();
         response->frame_name   = moveit_node_->move_group->getEndEffectorLink();
     }
+    void MoveToNamedCallback(const std::shared_ptr<move_grasp_msg::srv::MoveToNamed::Request> request, std::shared_ptr<move_grasp_msg::srv::MoveToNamed::Response> response)
+    {
+        RCLCPP_INFO(get_logger(), "Received move_to_named request:");
+        RCLCPP_INFO(get_logger(), "    target: %s", request->named_target.c_str());
+
+        try {
+            moveit_node_->SetTargetByName(request->named_target);
+        } catch (const std::exception &e) {
+            response->is_success = false;
+            response->message    = e.what();
+            return;
+        }
+
+        try {
+            moveit_node_->PlanAndMove();
+        } catch (const std::exception &e) {
+            response->is_success = false;
+            response->message    = e.what();
+            return;
+        }
+
+        response->is_success = true;
+    }
 
     void MoveToCallback(const std::shared_ptr<move_grasp_msg::srv::MoveTo::Request> request, std::shared_ptr<move_grasp_msg::srv::MoveTo::Response> response)
     {
         RCLCPP_INFO(get_logger(), "Received move_to request:");
-        auto frame_name = request->pose_stamped.header.frame_id.c_str();
+        const auto frame_name = request->pose_stamped.header.frame_id.c_str();
         RCLCPP_INFO(get_logger(), "    frame_id: %s", frame_name);
         MoveItNode::Print(get_logger(), request->pose_stamped.pose, "    ");
 

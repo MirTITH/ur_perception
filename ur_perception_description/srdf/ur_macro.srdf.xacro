@@ -24,7 +24,7 @@
     <!--SUBGROUPS
     - Groups can also be formed by referencing to already defined group names-->
     <group name="${prefix}ur_manipulator">
-      <chain base_link="${prefix}base_link" tip_link="${prefix}tool0" />
+      <chain base_link="${prefix}base_link" tip_link="grasp_center_link" />
     </group>
     <!--GROUP
     STATES - Purpose - Define a named state for a particular group, in terms of joint values. This
@@ -51,6 +51,14 @@
       <joint name="elbow_joint" value="${pi/2}" />
       <joint name="wrist_1_joint" value="${-pi/2}" />
       <joint name="wrist_2_joint" value="${-pi/2}" />
+      <joint name="wrist_3_joint" value="0" />
+    </group_state>
+    <group_state name="ready" group="${prefix}ur_manipulator">
+      <joint name="shoulder_pan_joint" value="${pi}" />
+      <joint name="shoulder_lift_joint" value="-1.4395745706609269" />
+      <joint name="elbow_joint" value="1.9782918135272425" />
+      <joint name="wrist_1_joint" value="-2.1096626720824183" />
+      <joint name="wrist_2_joint" value="-1.57185537019838" />
       <joint name="wrist_3_joint" value="0" />
     </group_state>
     <!--END

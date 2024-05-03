@@ -1,0 +1,4 @@
+string named_target
+---
+bool is_success
+string message
