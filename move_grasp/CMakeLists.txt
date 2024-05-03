@@ -10,6 +10,9 @@ find_package(ament_cmake REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(move_grasp_msg REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 add_executable(move_grasp src/move_grasp.cpp)
 target_include_directories(move_grasp PUBLIC
@@ -21,6 +24,9 @@ ament_target_dependencies(
   "moveit_ros_planning_interface"
   "rclcpp"
   "move_grasp_msg"
+  "tf2"
+  "tf2_ros"
+  "tf2_geometry_msgs"
 )
 
 install(TARGETS move_grasp

@@ -12,7 +12,7 @@
 
     <xacro:if value="$(arg sim_gazebo)">
         <xacro:include filename="$(find ur_perception_description)/urdf/gazebo_rgbd.xacro" />
-        <xacro:gazebo_camera parent="tool0">
+        <xacro:gazebo_camera parent="tool0" camera_link_name="gazebo_camera_link">
             <origin xyz="-0.0345040364877853 -0.0759815185860376 0.03063655608100728"
                 rpy="${0.00336741+pi/2} ${-0.01153856-pi/2}  0.02297956" />
         </xacro:gazebo_camera>

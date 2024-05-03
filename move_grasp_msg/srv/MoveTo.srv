@@ -1,4 +1,4 @@
-geometry_msgs/Pose pose
+geometry_msgs/PoseStamped pose_stamped
 ---
 bool is_success
 string message
