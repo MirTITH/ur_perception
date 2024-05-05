@@ -12,10 +12,16 @@
 #include <move_grasp_msg/srv/move_to.hpp>
 #include <move_grasp_msg/srv/get_end_effector_pose.hpp>
 #include <move_grasp_msg/srv/move_to_named.hpp>
+#include <move_grasp_msg/srv/grasp.hpp>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/buffer.h>
 #include <tf2/convert.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+#include <dh_gripper_msgs/msg/gripper_ctrl.hpp>
+#include <dh_gripper_msgs/msg/gripper_state.hpp>
+#include <thread>
+
+// #define NOMOVEIT
 
 class MoveItNode : public rclcpp::Node
 {
@@ -130,6 +136,9 @@ public:
         move_to_named_service_         = this->create_service<move_grasp_msg::srv::MoveToNamed>("move_to_named", std::bind(&MoveGraspService::MoveToNamedCallback, this, std::placeholders::_1, std::placeholders::_2));
         get_end_effector_pose_service_ = this->create_service<move_grasp_msg::srv::GetEndEffectorPose>("get_end_effector_pose", std::bind(&MoveGraspService::GetEndEffectorPoseCallback, this, std::placeholders::_1, std::placeholders::_2));
 
+        gripper_ctrl_pub_ = this->create_publisher<dh_gripper_msgs::msg::GripperCtrl>("/gripper/ctrl", 1);
+        grasp_service_    = this->create_service<move_grasp_msg::srv::Grasp>("grasp", std::bind(&MoveGraspService::GraspCallback, this, std::placeholders::_1, std::placeholders::_2));
+
         tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
         tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
     }
@@ -139,11 +148,26 @@ private:
     rclcpp::Service<move_grasp_msg::srv::MoveTo>::SharedPtr move_to_service_;
     rclcpp::Service<move_grasp_msg::srv::MoveToNamed>::SharedPtr move_to_named_service_;
     rclcpp::Service<move_grasp_msg::srv::GetEndEffectorPose>::SharedPtr get_end_effector_pose_service_;
+    rclcpp::Service<move_grasp_msg::srv::Grasp>::SharedPtr grasp_service_;
+    rclcpp::Publisher<dh_gripper_msgs::msg::GripperCtrl>::SharedPtr gripper_ctrl_pub_;
     std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
+    std::mutex mutex_;
+
+    void GraspCallback(const std::shared_ptr<move_grasp_msg::srv::Grasp::Request> request, std::shared_ptr<move_grasp_msg::srv::Grasp::Response> response)
+    {
+        std::lock_guard lock(mutex_);
+        RCLCPP_INFO(get_logger(), "Received grasp request");
+        dh_gripper_msgs::msg::GripperCtrl gripper_ctrl;
+        gripper_ctrl.position = request->grasp_width * 1000.0;
+        RCLCPP_INFO(get_logger(), "gripper_ctrl.position: %f", gripper_ctrl.position);
+        gripper_ctrl_pub_->publish(gripper_ctrl);
+        response->is_success = true;
+    }
 
     void GetEndEffectorPoseCallback(const std::shared_ptr<move_grasp_msg::srv::GetEndEffectorPose::Request> request, std::shared_ptr<move_grasp_msg::srv::GetEndEffectorPose::Response> response)
     {
+        std::lock_guard lock(mutex_);
         RCLCPP_INFO(get_logger(), "Received get_end_effector_pose request");
         (void)request; // Unused
         response->pose_stamped = moveit_node_->GetCurrentPose();
@@ -151,6 +175,7 @@ private:
     }
     void MoveToNamedCallback(const std::shared_ptr<move_grasp_msg::srv::MoveToNamed::Request> request, std::shared_ptr<move_grasp_msg::srv::MoveToNamed::Response> response)
     {
+        std::lock_guard lock(mutex_);
         RCLCPP_INFO(get_logger(), "Received move_to_named request:");
         RCLCPP_INFO(get_logger(), "    target: %s", request->named_target.c_str());
 
@@ -175,6 +200,7 @@ private:
 
     void MoveToCallback(const std::shared_ptr<move_grasp_msg::srv::MoveTo::Request> request, std::shared_ptr<move_grasp_msg::srv::MoveTo::Response> response)
     {
+        std::lock_guard lock(mutex_);
         RCLCPP_INFO(get_logger(), "Received move_to request:");
         const auto frame_name = request->pose_stamped.header.frame_id.c_str();
         RCLCPP_INFO(get_logger(), "    frame_id: %s", frame_name);
@@ -225,6 +251,7 @@ int main(int argc, char *argv[])
 
     auto const LOGGER = rclcpp::get_logger("move_grasp");
 
+#ifndef NOMOVEIT
     auto const moveit_node = std::make_shared<MoveItNode>("move_grasp");
     moveit_node->Init();
 
@@ -249,7 +276,11 @@ int main(int argc, char *argv[])
     RCLCPP_INFO_STREAM(LOGGER, ss.str());
 
     rclcpp::spin(service_node);
-
+#else
+    auto const service_node = std::make_shared<MoveGraspService>("move_grasp_service", nullptr);
+    RCLCPP_WARN(LOGGER, "MoveIt is disabled. This node will not be able to move the robot.");
+    rclcpp::spin(service_node);
+#endif
     // Shutdown ROS
     rclcpp::shutdown();
     return 0;

@@ -13,6 +13,7 @@
   <depend>rclcpp</depend>
   <depend>trac_ik_kinematics_plugin</depend>
   <depend>move_grasp_msg</depend>
+  <depend>dh_gripper_msgs</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
 
