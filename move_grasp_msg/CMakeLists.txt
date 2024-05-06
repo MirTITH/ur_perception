@@ -16,6 +16,9 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/GetEndEffectorPose.srv"
   "srv/MoveToNamed.srv"
   "srv/Grasp.srv"
+  "srv/Plan.srv"
+  "srv/GetJointPosition.srv"
+  "srv/MoveToJointPosition.srv"
   DEPENDENCIES geometry_msgs # Add packages that above messages depend on, in this case geometry_msgs for Sphere.msg
 )
 

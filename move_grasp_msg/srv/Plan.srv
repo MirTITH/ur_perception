@@ -1,0 +1,11 @@
+bool is_pose
+geometry_msgs/PoseStamped start_pose_stamped
+geometry_msgs/PoseStamped target_pose_stamped
+float64[] start_joint_position
+float64[] target_joint_position
+---
+bool is_success
+float32 distance
+float32 planning_time_ms
+float32 ik_time_ms
+string message

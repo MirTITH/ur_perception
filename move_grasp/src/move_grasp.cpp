@@ -13,6 +13,9 @@
 #include <move_grasp_msg/srv/get_end_effector_pose.hpp>
 #include <move_grasp_msg/srv/move_to_named.hpp>
 #include <move_grasp_msg/srv/grasp.hpp>
+#include <move_grasp_msg/srv/plan.hpp>
+#include <move_grasp_msg/srv/get_joint_position.hpp>
+#include <move_grasp_msg/srv/move_to_joint_position.hpp>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/buffer.h>
 #include <tf2/convert.h>
@@ -20,6 +23,7 @@
 #include <dh_gripper_msgs/msg/gripper_ctrl.hpp>
 #include <dh_gripper_msgs/msg/gripper_state.hpp>
 #include <thread>
+#include "timer.hpp"
 
 // #define NOMOVEIT
 
@@ -27,19 +31,29 @@ class MoveItNode : public rclcpp::Node
 {
 public:
     std::shared_ptr<moveit::planning_interface::MoveGroupInterface> move_group;
+    double max_velocity_scaling_factor_     = 0.05;
+    double max_acceleration_scaling_factor_ = 0.05;
 
 public:
     MoveItNode(const std::string &node_name)
         : Node(node_name, rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true))
     {
-        this->declare_parameter("planning_group", "ur_manipulator");
-        planning_group_ = this->get_parameter("planning_group").as_string();
+        // this->declare_parameter("planning_group", "ur_manipulator");
+        // this->declare_parameter("max_velocity_scaling_factor", 0.05);
+        // this->declare_parameter("max_acceleration_scaling_factor", 0.05);
+        planning_group_                  = this->get_parameter("planning_group").as_string();
+        max_velocity_scaling_factor_     = this->get_parameter("max_velocity_scaling_factor").as_double();
+        max_acceleration_scaling_factor_ = this->get_parameter("max_acceleration_scaling_factor").as_double();
         RCLCPP_INFO(get_logger(), "Planning group: %s", planning_group_.c_str());
     }
 
     void Init()
     {
         move_group = std::make_shared<moveit::planning_interface::MoveGroupInterface>(shared_from_this(), planning_group_);
+        move_group->setMaxVelocityScalingFactor(max_velocity_scaling_factor_);
+        move_group->setMaxAccelerationScalingFactor(max_acceleration_scaling_factor_);
+        RCLCPP_INFO(get_logger(), "Max velocity scaling factor: %lf", max_velocity_scaling_factor_);
+        RCLCPP_INFO(get_logger(), "Max acceleration scaling factor: %lf", max_acceleration_scaling_factor_);
     }
 
     void SetTargetByName(const std::string &target)
@@ -59,7 +73,7 @@ public:
         }
 
         RCLCPP_INFO(get_logger(), "Moving the robot");
-        auto move_result = move_group->move();
+        auto move_result = move_group->execute(my_plan);
 
         if (move_result != moveit::core::MoveItErrorCode::SUCCESS) {
             throw std::runtime_error("Failed to move the robot");
@@ -77,7 +91,7 @@ public:
         const moveit::core::JointModelGroup *joint_model_group = move_group->getCurrentState()->getJointModelGroup(planning_group_);
 
         auto ik_result = target_robot_state.setFromIK(joint_model_group, target_pose);
-        RCLCPP_INFO_STREAM(get_logger(), "ik_result: " << ik_result);
+        // RCLCPP_INFO_STREAM(get_logger(), "ik_result: " << ik_result);
         if (!ik_result) {
             throw std::runtime_error("Failed to calculate IK solution");
         }
@@ -85,12 +99,21 @@ public:
         std::vector<double> joint_group_positions;
         target_robot_state.copyJointGroupPositions(joint_model_group, joint_group_positions);
 
-        RCLCPP_INFO_STREAM(get_logger(), "Setting target pose to: ");
-        for (size_t i = 0; i < joint_group_positions.size(); ++i) {
-            RCLCPP_INFO_STREAM(get_logger(), "Joint " << i << ": " << joint_group_positions[i]);
-        }
+        // RCLCPP_INFO_STREAM(get_logger(), "Setting target pose to: ");
+        // for (size_t i = 0; i < joint_group_positions.size(); ++i) {
+        //     RCLCPP_INFO_STREAM(get_logger(), "Joint " << i << ": " << joint_group_positions[i]);
+        // }
 
         move_group->setJointValueTarget(joint_group_positions);
+    }
+
+    auto GetJointPos() const
+    {
+        auto robot_state                                       = move_group->getCurrentState();
+        const moveit::core::JointModelGroup *joint_model_group = move_group->getCurrentState()->getJointModelGroup(planning_group_);
+        std::vector<double> joint_pos;
+        robot_state->copyJointGroupPositions(joint_model_group, joint_pos);
+        return joint_pos;
     }
 
     std::string GetPlanningGroup() const
@@ -126,15 +149,29 @@ private:
     std::string planning_group_;
 };
 
+double CalcTrajectoryLength(const trajectory_msgs::msg::JointTrajectory &trajectory)
+{
+    double length = 0.0;
+    for (const auto &point : trajectory.points) {
+        for (size_t i = 1; i < point.positions.size(); ++i) {
+            length += std::pow(point.positions[i] - point.positions[i - 1], 2);
+        }
+    }
+    return std::sqrt(length);
+}
+
 class MoveGraspService : public rclcpp::Node
 {
 public:
     MoveGraspService(const std::string &node_name, std::shared_ptr<MoveItNode> moveit_node)
         : Node(node_name), moveit_node_(std::move(moveit_node))
     {
-        move_to_service_               = this->create_service<move_grasp_msg::srv::MoveTo>("move_to", std::bind(&MoveGraspService::MoveToCallback, this, std::placeholders::_1, std::placeholders::_2));
-        move_to_named_service_         = this->create_service<move_grasp_msg::srv::MoveToNamed>("move_to_named", std::bind(&MoveGraspService::MoveToNamedCallback, this, std::placeholders::_1, std::placeholders::_2));
-        get_end_effector_pose_service_ = this->create_service<move_grasp_msg::srv::GetEndEffectorPose>("get_end_effector_pose", std::bind(&MoveGraspService::GetEndEffectorPoseCallback, this, std::placeholders::_1, std::placeholders::_2));
+        move_to_service_                = this->create_service<move_grasp_msg::srv::MoveTo>("move_grasp/move_to", std::bind(&MoveGraspService::MoveToCallback, this, std::placeholders::_1, std::placeholders::_2));
+        move_to_named_service_          = this->create_service<move_grasp_msg::srv::MoveToNamed>("move_grasp/move_to_named", std::bind(&MoveGraspService::MoveToNamedCallback, this, std::placeholders::_1, std::placeholders::_2));
+        get_end_effector_pose_service_  = this->create_service<move_grasp_msg::srv::GetEndEffectorPose>("move_grasp/get_end_effector_pose", std::bind(&MoveGraspService::GetEndEffectorPoseCallback, this, std::placeholders::_1, std::placeholders::_2));
+        plan_service_                   = this->create_service<move_grasp_msg::srv::Plan>("move_grasp/plan", std::bind(&MoveGraspService::PlanCallback, this, std::placeholders::_1, std::placeholders::_2));
+        get_joint_position_service_     = this->create_service<move_grasp_msg::srv::GetJointPosition>("move_grasp/get_joint_position", std::bind(&MoveGraspService::GetJointPositionCallback, this, std::placeholders::_1, std::placeholders::_2));
+        move_to_joint_position_service_ = this->create_service<move_grasp_msg::srv::MoveToJointPosition>("move_grasp/move_to_joint_position", std::bind(&MoveGraspService::MoveToJointPositionCallback, this, std::placeholders::_1, std::placeholders::_2));
 
         gripper_ctrl_pub_ = this->create_publisher<dh_gripper_msgs::msg::GripperCtrl>("/gripper/ctrl", 1);
         grasp_service_    = this->create_service<move_grasp_msg::srv::Grasp>("grasp", std::bind(&MoveGraspService::GraspCallback, this, std::placeholders::_1, std::placeholders::_2));
@@ -149,10 +186,21 @@ private:
     rclcpp::Service<move_grasp_msg::srv::MoveToNamed>::SharedPtr move_to_named_service_;
     rclcpp::Service<move_grasp_msg::srv::GetEndEffectorPose>::SharedPtr get_end_effector_pose_service_;
     rclcpp::Service<move_grasp_msg::srv::Grasp>::SharedPtr grasp_service_;
+    rclcpp::Service<move_grasp_msg::srv::Plan>::SharedPtr plan_service_;
+    rclcpp::Service<move_grasp_msg::srv::GetJointPosition>::SharedPtr get_joint_position_service_;
+    rclcpp::Service<move_grasp_msg::srv::MoveToJointPosition>::SharedPtr move_to_joint_position_service_;
     rclcpp::Publisher<dh_gripper_msgs::msg::GripperCtrl>::SharedPtr gripper_ctrl_pub_;
     std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
     std::mutex mutex_;
+
+    void GetJointPositionCallback(const std::shared_ptr<move_grasp_msg::srv::GetJointPosition::Request> request, std::shared_ptr<move_grasp_msg::srv::GetJointPosition::Response> response)
+    {
+        std::lock_guard lock(mutex_);
+        RCLCPP_INFO(get_logger(), "Received get_joint_position request");
+        (void)request; // Unused
+        response->joint_position = moveit_node_->GetJointPos();
+    }
 
     void GraspCallback(const std::shared_ptr<move_grasp_msg::srv::Grasp::Request> request, std::shared_ptr<move_grasp_msg::srv::Grasp::Response> response)
     {
@@ -235,6 +283,94 @@ private:
 
         try {
             moveit_node_->PlanAndMove();
+        } catch (const std::exception &e) {
+            response->is_success = false;
+            response->message    = e.what();
+            return;
+        }
+
+        response->is_success = true;
+    }
+
+    void MoveToJointPositionCallback(const std::shared_ptr<move_grasp_msg::srv::MoveToJointPosition::Request> request, std::shared_ptr<move_grasp_msg::srv::MoveToJointPosition::Response> response)
+    {
+        std::lock_guard lock(mutex_);
+        RCLCPP_INFO(get_logger(), "Received move_to_joint_position request:");
+
+        auto joint_group_positions = moveit_node_->GetJointPos();
+        if (joint_group_positions.size() != request->joint_position.size()) {
+            response->is_success = false;
+            response->message    = "Invalid joint position size";
+            return;
+        }
+
+        for (size_t i = 0; i < joint_group_positions.size(); ++i) {
+            joint_group_positions[i] = request->joint_position[i];
+        }
+
+        moveit_node_->move_group->setJointValueTarget(joint_group_positions);
+
+        try {
+            moveit_node_->PlanAndMove();
+        } catch (const std::exception &e) {
+            response->is_success = false;
+            response->message    = e.what();
+            return;
+        }
+
+        response->is_success = true;
+    }
+
+    void PlanCallback(const std::shared_ptr<move_grasp_msg::srv::Plan::Request> request, std::shared_ptr<move_grasp_msg::srv::Plan::Response> response)
+    {
+        std::lock_guard lock(mutex_);
+        RCLCPP_INFO(get_logger(), "Received plan request");
+        RCLCPP_INFO(get_logger(), "is_pose: %d", request->is_pose);
+
+        auto move_group                                        = moveit_node_->move_group;
+        const auto planning_group_name                         = moveit_node_->GetPlanningGroup();
+        const moveit::core::JointModelGroup *joint_model_group = move_group->getCurrentState()->getJointModelGroup(planning_group_name);
+
+        Timer timer;
+        if (request->is_pose) {
+            moveit::core::RobotState start_state(*move_group->getCurrentState());
+            start_state.setFromIK(joint_model_group, request->start_pose_stamped.pose);
+            move_group->setStartState(start_state);
+            geometry_msgs::msg::Pose target_pose;
+
+            try {
+                moveit_node_->SetTargetPose(target_pose);
+            } catch (const std::exception &e) {
+                response->is_success = false;
+                response->message    = e.what();
+                return;
+            }
+
+            response->ik_time_ms = timer.elapsed_ms();
+        } else {
+            moveit::core::RobotState start_state(*move_group->getCurrentState());
+            start_state.setJointGroupPositions(joint_model_group, request->start_joint_position);
+            move_group->setStartState(start_state);
+            move_group->setJointValueTarget(request->target_joint_position);
+        }
+
+        try {
+            timer.reset();
+            moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+            auto planing_result = move_group->plan(my_plan);
+
+            if (planing_result != moveit::core::MoveItErrorCode::SUCCESS) {
+                throw std::runtime_error("Failed to plan the motion");
+            }
+            response->planning_time_ms = timer.elapsed_ms();
+
+            RCLCPP_INFO(get_logger(), "Planning time: %f", response->planning_time_ms);
+            RCLCPP_INFO(get_logger(), "Planning time from my_plan: %lf", my_plan.planning_time_);
+
+            auto length = CalcTrajectoryLength(my_plan.trajectory_.joint_trajectory);
+            RCLCPP_INFO(get_logger(), "Trajectory length: %f", length);
+            response->distance = length;
+
         } catch (const std::exception &e) {
             response->is_success = false;
             response->message    = e.what();

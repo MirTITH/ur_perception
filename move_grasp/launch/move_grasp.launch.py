@@ -28,7 +28,9 @@ def generate_launch_description():
     )
     use_sim_time = LaunchConfiguration("use_sim_time")
 
-    kinematics_file = os.path.join(get_package_share_directory("ur_perception_description"), "config", "kinematics.yaml")
+    kinematics_file = os.path.join(
+        get_package_share_directory("ur_perception_description"), "config", "kinematics.yaml"
+    )
     robot_description_kinematics = load_yaml(kinematics_file)
 
     launch_entities.append(
@@ -39,6 +41,9 @@ def generate_launch_description():
             parameters=[
                 {"use_sim_time": use_sim_time},
                 {"robot_description_kinematics": robot_description_kinematics},
+                {"max_velocity_scaling_factor": 1.0},
+                {"max_acceleration_scaling_factor": 1.0},
+                {"planning_group": "ur_manipulator"},
             ],
         )
     )
