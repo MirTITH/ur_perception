@@ -151,13 +151,22 @@ private:
 
 double CalcTrajectoryLength(const trajectory_msgs::msg::JointTrajectory &trajectory)
 {
-    double length = 0.0;
-    for (const auto &point : trajectory.points) {
-        for (size_t i = 1; i < point.positions.size(); ++i) {
-            length += std::pow(point.positions[i] - point.positions[i - 1], 2);
+    auto calc_point_distance = [](const trajectory_msgs::msg::JointTrajectoryPoint &point1, const trajectory_msgs::msg::JointTrajectoryPoint &point2) {
+        double distance = 0.0;
+        if (point1.positions.size() != point2.positions.size()) {
+            throw std::runtime_error("Invalid trajectory point size");
         }
+        for (size_t i = 0; i < point1.positions.size(); ++i) {
+            distance += std::pow(point1.positions[i] - point2.positions[i], 2);
+        }
+        return std::sqrt(distance);
+    };
+
+    double length = 0.0;
+    for (size_t i = 1; i < trajectory.points.size(); ++i) {
+        length += calc_point_distance(trajectory.points[i - 1], trajectory.points[i]);
     }
-    return std::sqrt(length);
+    return length;
 }
 
 class MoveGraspService : public rclcpp::Node
