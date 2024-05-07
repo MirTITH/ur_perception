@@ -56,6 +56,7 @@ ur_manipulator:
   planner_configs:
     - RRTConnectkConfigDefault
     - RRTstarkConfigDefault
+    - RRTkConfigDefault
   ##Note: commenting the following line lets moveit chose RRTConnect as default planner rather than LBKPIECE
   #projection_evaluator: joints(shoulder_pan_joint,shoulder_lift_joint)
   longest_valid_segment_fraction: 0.01

@@ -13,6 +13,7 @@ from geometry_msgs.msg import Pose
 import time
 import json
 from typing import List
+import os
 
 
 class PlanningTest(Node):
@@ -72,9 +73,17 @@ class PlanningTest(Node):
     #     else:
     #         self.get_logger().info(f"Service call failed: {future.exception()}")
 
-    def plan_joint_position(self, start_joint_position: List[float], target_joint_position: List[float]):
+    def plan_joint_position(
+        self,
+        start_joint_position: List[float],
+        target_joint_position: List[float],
+        planner_id: str = "",
+        planning_time: float = 1.0,
+    ):
         request = Plan.Request()
         request.is_pose = False
+        request.planner_id = planner_id
+        request.planning_time = planning_time
         request.start_joint_position = start_joint_position
         request.target_joint_position = target_joint_position
         future = self.plan_client.call_async(request)
@@ -242,7 +251,12 @@ def make_single_statistic_entry(is_success: bool, ik_time_ms: float, distance: f
     }
 
 
-def test_planning_joint_pos(planning_test: PlanningTest, joint_positions: List[List[float]]):
+def test_planning_joint_pos(
+    planning_test: PlanningTest,
+    joint_positions: List[List[float]],
+    planner_id: str = "geometric::RRTConnect",
+    planning_time: float = 1.0,
+):
     stats = []
     for i, start_pos in enumerate(joint_positions):
         for j, target_pos in enumerate(joint_positions):
@@ -253,7 +267,7 @@ def test_planning_joint_pos(planning_test: PlanningTest, joint_positions: List[L
             stat = []
             for count in range(5):
                 print(f"    Attempt {count + 1}/5:")
-                result = planning_test.plan_joint_position(start_pos, target_pos)
+                result = planning_test.plan_joint_position(start_pos, target_pos, planner_id, planning_time)
                 if result is not None:
                     print(f"    is_success: {result.is_success}, message: {result.message}")
                     ik_time_ms = result.ik_time_ms
@@ -278,6 +292,24 @@ def test_planning_joint_pos(planning_test: PlanningTest, joint_positions: List[L
     return stats
 
 
+def test_and_save_planning_joint_pos(
+    planning_test: PlanningTest,
+    position_file_path: str,
+    planner_id: str = "geometric::RRTConnect",
+    planning_time: float = 1.0,
+    save_folder: str = "benchmark_result",
+):
+    joint_positions = load_joint_position_list(position_file_path)
+    # joint_positions = joint_positions[:3]
+    stats = test_planning_joint_pos(planning_test, joint_positions, planner_id, planning_time)
+    save_path = os.path.join(save_folder, f"{os.path.basename(position_file_path)}_{planner_id}_{planning_time}s.json")
+    if not os.path.exists(save_folder):
+        os.makedirs(save_folder)
+
+    with open(save_path, "w") as file:
+        json.dump(stats, file)
+
+
 def main():
     print("Hello, planning test!")
 
@@ -289,15 +321,115 @@ def main():
 
     # inspect_environment_joint_pos(planning_test)
 
-    test_planning_joint_pos_file = "self_collision_planning"
-    stats = test_planning_joint_pos(planning_test, load_joint_position_list(test_planning_joint_pos_file + ".json"))
-    with open(test_planning_joint_pos_file + "result.json", "w") as file:
-        json.dump(stats, file)
+    save_folder = "benchmark_result/no_env"
 
-    test_planning_joint_pos_file = "environment_planning"
-    stats = test_planning_joint_pos(planning_test, load_joint_position_list(test_planning_joint_pos_file + ".json"))
-    with open(test_planning_joint_pos_file + "result.json", "w") as file:
-        json.dump(stats, file)
+    # RRTkConfigDefault
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="self_collision_pos.json",
+        planner_id="RRTkConfigDefault",
+        planning_time=1.0,
+        save_folder=save_folder,
+    )
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="environment_pos.json",
+        planner_id="RRTkConfigDefault",
+        planning_time=1.0,
+        save_folder=save_folder,
+    )
+
+    # RRTConnectkConfigDefault
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="self_collision_pos.json",
+        planner_id="RRTConnectkConfigDefault",
+        planning_time=1.0,
+        save_folder=save_folder,
+    )
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="environment_pos.json",
+        planner_id="RRTConnectkConfigDefault",
+        planning_time=1.0,
+        save_folder=save_folder,
+    )
+
+    # RRTstarkConfigDefault
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="self_collision_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=2.0,
+        save_folder=save_folder,
+    )
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="environment_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=2.0,
+        save_folder=save_folder,
+    )
+
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="self_collision_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=1.0,
+        save_folder=save_folder,
+    )
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="environment_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=1.0,
+        save_folder=save_folder,
+    )
+
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="self_collision_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=0.5,
+        save_folder=save_folder,
+    )
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="environment_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=0.5,
+        save_folder=save_folder,
+    )
+
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="self_collision_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=0.2,
+        save_folder=save_folder,
+    )
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="environment_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=0.2,
+        save_folder=save_folder,
+    )
+
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="self_collision_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=0.1,
+        save_folder=save_folder,
+    )
+    test_and_save_planning_joint_pos(
+        planning_test=planning_test,
+        position_file_path="environment_pos.json",
+        planner_id="RRTstarkConfigDefault",
+        planning_time=0.1,
+        save_folder=save_folder,
+    )
 
 
 if __name__ == "__main__":

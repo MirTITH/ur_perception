@@ -355,6 +355,14 @@ private:
         }
 
         try {
+            if (!request->planner_id.empty()) {
+                RCLCPP_INFO(get_logger(), "Setting planner_id to %s", request->planner_id.c_str());
+                move_group->setPlannerId(request->planner_id);
+            }
+            if (request->planning_time > 0) {
+                RCLCPP_INFO(get_logger(), "Setting planning_time to %lf", request->planning_time);
+                move_group->setPlanningTime(request->planning_time);
+            }
             timer.reset();
             moveit::planning_interface::MoveGroupInterface::Plan my_plan;
             auto planing_result = move_group->plan(my_plan);

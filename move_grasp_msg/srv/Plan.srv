@@ -3,6 +3,8 @@ geometry_msgs/PoseStamped start_pose_stamped
 geometry_msgs/PoseStamped target_pose_stamped
 float64[] start_joint_position
 float64[] target_joint_position
+string planner_id
+float64 planning_time
 ---
 bool is_success
 float32 distance
