@@ -150,10 +150,10 @@ def launch_setup(context, *args, **kwargs):
             planning_scene_monitor_parameters,
             {"use_sim_time": use_sim_time},
             warehouse_ros_config,
-            # moveit_sensor_config,
-            # {"octomap_frame": "world"},
-            # {"octomap_resolution": 0.02},
-            # {"max_range": 2.0},
+            moveit_sensor_config,
+            {"octomap_frame": "world"},
+            {"octomap_resolution": 0.02},
+            {"max_range": 2.0},
         ],
     )
 

@@ -152,18 +152,21 @@ private:
 double CalcTrajectoryLength(const trajectory_msgs::msg::JointTrajectory &trajectory)
 {
     auto calc_point_distance = [](const trajectory_msgs::msg::JointTrajectoryPoint &point1, const trajectory_msgs::msg::JointTrajectoryPoint &point2) {
-        double distance = 0.0;
         if (point1.positions.size() != point2.positions.size()) {
             throw std::runtime_error("Invalid trajectory point size");
         }
-        for (size_t i = 0; i < point1.positions.size(); ++i) {
+
+        double distance = 0.0;
+        auto dim        = point1.positions.size();
+        for (size_t i = 0; i < dim; ++i) {
             distance += std::pow(point1.positions[i] - point2.positions[i], 2);
         }
         return std::sqrt(distance);
     };
 
-    double length = 0.0;
-    for (size_t i = 1; i < trajectory.points.size(); ++i) {
+    double length             = 0.0;
+    auto trajectory_point_num = trajectory.points.size();
+    for (size_t i = 1; i < trajectory_point_num; ++i) {
         length += calc_point_distance(trajectory.points[i - 1], trajectory.points[i]);
     }
     return length;

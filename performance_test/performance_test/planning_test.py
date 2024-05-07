@@ -257,23 +257,33 @@ def test_planning_joint_pos(
     planner_id: str = "geometric::RRTConnect",
     planning_time: float = 1.0,
 ):
+    max_try = 20
+    target_success_num = 5
+
     stats = []
     for i, start_pos in enumerate(joint_positions):
         for j, target_pos in enumerate(joint_positions):
             if i == j:
                 continue
 
-            print(f"Planning from pose {i + 1}/{len(joint_positions)} to pose {j + 1}/{len(joint_positions)}:")
+            print(f"From {i + 1}/{len(joint_positions)} to {j + 1}/{len(joint_positions)}:")
             stat = []
-            for count in range(5):
-                print(f"    Attempt {count + 1}/5:")
+
+            success_count = 0
+            for count in range(max_try):
+                if success_count >= target_success_num:
+                    break
+
+                print(f"    Attempt {count + 1}/{max_try}, success: {success_count + 1}/{target_success_num}:")
                 result = planning_test.plan_joint_position(start_pos, target_pos, planner_id, planning_time)
                 if result is not None:
-                    print(f"    is_success: {result.is_success}, message: {result.message}")
+                    print(f"    is_success: {result.is_success}, message: {result.message}", end="")
+                    if result.is_success:
+                        success_count += 1
                     ik_time_ms = result.ik_time_ms
                     distance = result.distance
                     planning_time_ms = result.planning_time_ms
-                    print(f"    IK time: {ik_time_ms} ms, distance: {distance}, planning time: {planning_time_ms} ms")
+                    print(f"    IK: {ik_time_ms} ms, distance: {distance}, planning time: {planning_time_ms} ms")
                     stat.append(make_single_statistic_entry(result.is_success, ik_time_ms, distance, planning_time_ms))
                 else:
                     print(
@@ -321,7 +331,7 @@ def main():
 
     # inspect_environment_joint_pos(planning_test)
 
-    save_folder = "benchmark_result/no_env"
+    save_folder = "benchmark_result/with_env"
 
     # RRTkConfigDefault
     test_and_save_planning_joint_pos(
