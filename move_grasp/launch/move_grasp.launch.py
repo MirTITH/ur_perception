@@ -41,8 +41,8 @@ def generate_launch_description():
             parameters=[
                 {"use_sim_time": use_sim_time},
                 {"robot_description_kinematics": robot_description_kinematics},
-                {"max_velocity_scaling_factor": 1.0},
-                {"max_acceleration_scaling_factor": 1.0},
+                {"max_velocity_scaling_factor": 0.15},
+                {"max_acceleration_scaling_factor": 0.15},
                 {"planning_group": "ur_manipulator"},
             ],
         )

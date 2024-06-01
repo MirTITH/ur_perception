@@ -186,7 +186,7 @@ public:
         move_to_joint_position_service_ = this->create_service<move_grasp_msg::srv::MoveToJointPosition>("move_grasp/move_to_joint_position", std::bind(&MoveGraspService::MoveToJointPositionCallback, this, std::placeholders::_1, std::placeholders::_2));
 
         gripper_ctrl_pub_ = this->create_publisher<dh_gripper_msgs::msg::GripperCtrl>("/gripper/ctrl", 1);
-        grasp_service_    = this->create_service<move_grasp_msg::srv::Grasp>("grasp", std::bind(&MoveGraspService::GraspCallback, this, std::placeholders::_1, std::placeholders::_2));
+        grasp_service_    = this->create_service<move_grasp_msg::srv::Grasp>("move_grasp/grasp", std::bind(&MoveGraspService::GraspCallback, this, std::placeholders::_1, std::placeholders::_2));
 
         tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
         tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);

@@ -4,11 +4,13 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /MotionPlanning1
         - /MotionPlanning1/Scene Geometry1
         - /MotionPlanning1/Planning Request1
+        - /PointCloud21
         - /TF1/Frames1
       Splitter Ratio: 0.4957627058029175
-    Tree Height: 472
+    Tree Height: 314
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -91,10 +93,6 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          camera_color_optical_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           camera_link:
             Alpha: 1
             Show Axes: false
@@ -110,10 +108,6 @@ Visualization Manager:
             Show Trail: false
             Value: true
           ft_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          gazebo_camera_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -247,7 +241,7 @@ Visualization Manager:
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
         Planning Group: ur_manipulator
-        Query Goal State: true
+        Query Goal State: false
         Query Start State: false
         Show Workspace: false
         Start State Alpha: 1
@@ -286,10 +280,6 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          camera_color_optical_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           camera_link:
             Alpha: 1
             Show Axes: false
@@ -305,10 +295,6 @@ Visualization Manager:
             Show Trail: false
             Value: true
           ft_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          gazebo_camera_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -435,7 +421,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -446,7 +432,7 @@ Visualization Manager:
       Selectable: true
       Size (Pixels): 1
       Size (m): 0.009999999776482582
-      Style: Squares
+      Style: Points
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -456,21 +442,135 @@ Visualization Manager:
         Value: /camera/depth/color/points
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
+      Value: true
     - Class: rviz_default_plugins/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        base:
+          Value: false
+        base_link:
+          Value: false
+        base_link_inertia:
+          Value: false
+        camera_bottom_screw_frame:
+          Value: false
+        camera_color_frame:
+          Value: false
+        camera_color_optical_frame:
+          Value: false
+        camera_depth_frame:
+          Value: false
+        camera_depth_optical_frame:
+          Value: false
+        camera_link:
+          Value: false
+        flange:
+          Value: false
+        forearm_link:
+          Value: false
+        ft_frame:
+          Value: false
+        grasp_center_link:
+          Value: true
+        grasp_target:
+          Value: true
+        gripper_base_link:
+          Value: false
+        gripper_finger1_finger_link:
+          Value: false
+        gripper_finger1_finger_tip_link:
+          Value: false
+        gripper_finger1_inner_knuckle_link:
+          Value: false
+        gripper_finger1_knuckle_link:
+          Value: false
+        gripper_finger2_finger_link:
+          Value: false
+        gripper_finger2_finger_tip_link:
+          Value: false
+        gripper_finger2_inner_knuckle_link:
+          Value: false
+        gripper_finger2_knuckle_link:
+          Value: false
+        hdz_base_link:
+          Value: false
+        hdz_extend_board_link:
+          Value: false
+        hdz_steel_frame_link:
+          Value: false
+        hdz_ur_base_link:
+          Value: false
+        hdz_ur_control_cabinet_link:
+          Value: false
+        shoulder_link:
+          Value: false
+        tool0:
+          Value: false
+        upper_arm_link:
+          Value: false
+        world:
+          Value: false
+        wrist_1_link:
+          Value: false
+        wrist_2_link:
+          Value: false
+        wrist_3_link:
+          Value: false
       Marker Scale: 0.5
       Name: TF
       Show Arrows: false
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        world:
+          hdz_base_link:
+            hdz_extend_board_link:
+              hdz_steel_frame_link:
+                hdz_ur_control_cabinet_link:
+                  {}
+              hdz_ur_base_link:
+                base_link:
+                  base:
+                    {}
+                  base_link_inertia:
+                    shoulder_link:
+                      upper_arm_link:
+                        forearm_link:
+                          wrist_1_link:
+                            wrist_2_link:
+                              wrist_3_link:
+                                flange:
+                                  tool0:
+                                    camera_bottom_screw_frame:
+                                      camera_link:
+                                        camera_color_frame:
+                                          camera_color_optical_frame:
+                                            {}
+                                        camera_depth_frame:
+                                          camera_depth_optical_frame:
+                                            grasp_target:
+                                              {}
+                                    grasp_center_link:
+                                      {}
+                                    gripper_base_link:
+                                      gripper_finger1_inner_knuckle_link:
+                                        gripper_finger1_finger_tip_link:
+                                          {}
+                                      gripper_finger1_knuckle_link:
+                                        gripper_finger1_finger_link:
+                                          {}
+                                      gripper_finger2_inner_knuckle_link:
+                                        gripper_finger2_finger_tip_link:
+                                          {}
+                                      gripper_finger2_knuckle_link:
+                                        gripper_finger2_finger_link:
+                                          {}
+                                ft_frame:
+                                  {}
       Update Interval: 0
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -517,43 +617,43 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 4.167544364929199
+      Distance: 1.4876282215118408
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.40915852785110474
-        Y: 0.031071141362190247
-        Z: 0.7929641008377075
+        X: 0.6933834552764893
+        Y: 0.05748077854514122
+        Z: 0.30643483996391296
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5197941064834595
+      Pitch: 0.3297941982746124
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.2903970181941986
+      Yaw: 0.8953966498374939
     Saved: ~
 Window Geometry:
   Displays:
-    collapsed: false
-  Height: 1369
-  Hide Left Dock: false
+    collapsed: true
+  Height: 999
+  Hide Left Dock: true
   Hide Right Dock: true
   MotionPlanning:
-    collapsed: false
+    collapsed: true
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000022e000004defc020000000bfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000007901000003fb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000050000002290000010101000003fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000005401000003fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000027a000002b4000001c801000003000000010000018600000368fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000005200000368000000db01000003fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000007d1000004de00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000022e00000368fc020000000bfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000007901000003fb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007300000000520000018d0000010301000003fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000005601000003fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000001e0000001da000001da01000003000000010000018600000368fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000005200000368000000df01000003fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000003c00000036800000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
     collapsed: false
   Views:
     collapsed: true
-  Width: 2560
-  X: 0
+  Width: 960
+  X: 960
   Y: 0

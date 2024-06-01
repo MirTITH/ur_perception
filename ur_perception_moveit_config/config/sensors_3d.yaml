@@ -2,7 +2,7 @@ sensors:
   - default_sensor
 default_sensor:
   filtered_cloud_topic: filtered_cloud
-  max_range: 3.0
+  max_range: 1.5
   max_update_rate: 1.0
   padding_offset: 0.1
   padding_scale: 1.0
