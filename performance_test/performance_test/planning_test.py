@@ -331,7 +331,7 @@ def main():
 
     # inspect_environment_joint_pos(planning_test)
 
-    save_folder = "benchmark_result/with_env"
+    save_folder = "benchmark_result/no_env"
 
     # RRTkConfigDefault
     test_and_save_planning_joint_pos(
